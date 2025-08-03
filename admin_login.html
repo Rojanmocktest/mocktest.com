@@ -83,7 +83,7 @@
   <div class="login-container" role="main" aria-label="Admin Login Form">
     <img src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/527959586_783324677549682_8386284971334615592_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pWOnDOSdQBQQ7kNvwGFqPdN&_nc_oc=AdlQEIOOMZm5_1u5iLspRJbW0OJ676EiFJH0yg28Aw0wsSIaLU-uhbR48hOA45zMtb0iBBI-3DevUNzv8a6qpwXI&_nc_zt=23&_nc_ht=scontent.fktm10-1.fna&_nc_gid=WsuuU5wi7cnZcLmvQlqkjA&oh=00_AfSNp-D0hkEeivyA1ePdwP4oyVBPpiYDV_QI7PZjFp6VGQ&oe=689566BC" alt="Rojan Mocktest Logo" />
     <h2>Admin Login</h2>
-    <form>
+    <form id="adminLoginForm" onsubmit="return validateAdmin(event)">
       <label for="adminID" class="sr-only">Admin ID</label>
       <input type="text" id="adminID" name="adminID" placeholder="Admin ID" required autocomplete="username" />
       
@@ -97,6 +97,25 @@
       <a href="student_login.html" aria-label="Go to Student Login">Student Login</a>
     </div>
   </div>
+
+  <script>
+    function validateAdmin(event) {
+      event.preventDefault();
+      const adminID = document.getElementById('adminID').value.trim();
+      const password = document.getElementById('password').value;
+
+      const validID = 'Rojangiree@edu.com.np';
+      const validPass = 'Rojzaangiri@admin.edu';
+
+      if(adminID === validID && password === validPass) {
+        alert('Login successful! Redirecting to admin dashboard...');
+        window.location.href = 'admin_dashboard.html'; // Change if your dashboard has a different path
+      } else {
+        alert('Invalid Admin ID or Password. Please try again.');
+      }
+      return false;
+    }
+  </script>
 
 </body>
 </html>
