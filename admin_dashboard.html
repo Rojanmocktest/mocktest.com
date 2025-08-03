@@ -179,7 +179,10 @@
     form input[type="email"],
     form input[type="password"],
     form select,
-    form textarea {
+    form textarea,
+    form input[type="date"],
+    form input[type="time"],
+    form input[type="number"] {
       width: 100%;
       padding: 0.4rem 0.6rem;
       border: 1.5px solid #ccc;
@@ -193,7 +196,10 @@
     form input[type="email"]:focus,
     form input[type="password"]:focus,
     form select:focus,
-    form textarea:focus {
+    form textarea:focus,
+    form input[type="date"]:focus,
+    form input[type="time"]:focus,
+    form input[type="number"]:focus {
       border-color: #27ae60;
       outline: none;
     }
@@ -260,45 +266,6 @@
       width: fit-content;
     }
 
-    /* User Management Form */
-    #userForm {
-      max-width: 500px;
-    }
-    #userList {
-      margin-top: 1rem;
-      max-height: 350px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 0.5rem;
-    }
-    #userList ul {
-      list-style: none;
-    }
-    #userList ul li {
-      margin-bottom: 0.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.3rem 0.5rem;
-      border-radius: 4px;
-      background: #f0f4f8;
-    }
-    #userList ul li span {
-      font-weight: 600;
-    }
-
-    /* Notification area */
-    #notificationArea {
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 8px;
-      background: #d4edda;
-      color: #155724;
-      display: none;
-      font-weight: 600;
-    }
-
     /* Scrollbar style */
     nav ul::-webkit-scrollbar,
     #userList::-webkit-scrollbar,
@@ -358,6 +325,7 @@
       </ul>
     </nav>
 
+    <!-- User Management -->
     <section id="user-management" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navUserMgmt">
       <h2>User Management</h2>
       <p>Create, update, delete student/admin accounts, assign roles, and reset passwords.</p>
@@ -384,6 +352,7 @@
       </div>
     </section>
 
+    <!-- Question Bank Management -->
     <section id="question-bank" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navQuestionBank" hidden>
       <h2>Question Bank Management</h2>
       <p>Manage questions by class, subject, and difficulty. Add, edit, or delete MCQs.</p>
@@ -482,7 +451,7 @@
           <input type="text" id="opt3" name="opt3" placeholder="Option 3" required />
           <input type="text" id="opt4" name="opt4" placeholder="Option 4" required />
 
-          <label for="qAnswer">Correct Answer:</label>
+          <label for="qAnswer">Correct Answer (1-4):</label>
           <select id="qAnswer" name="qAnswer" required>
             <option value="1">Option 1</option>
             <option value="2">Option 2</option>
@@ -490,7 +459,7 @@
             <option value="4">Option 4</option>
           </select>
 
-          <div style="margin-top: 1rem; display:flex; gap: 1rem;">
+          <div style="margin-top: 1rem; display: flex; gap: 1rem;">
             <button type="submit" class="primary-btn">Save</button>
             <button type="button" id="cancelModalBtn" class="danger-btn">Cancel</button>
           </div>
@@ -498,48 +467,290 @@
       </dialog>
     </section>
 
+    <!-- Test Scheduling -->
     <section id="test-scheduling" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navTestSchedule" hidden>
       <h2>Test & Exam Scheduling</h2>
-      <p>Create and assign tests with date, time, and duration. Manage availability.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+      <p>Create, assign, and manage test schedules for classes and subjects.</p>
+
+      <form id="testScheduleForm" aria-label="Create or Edit Test Schedule" style="max-width: 600px; margin-bottom: 1rem;">
+        <label for="testTitle">Test Title:</label>
+        <input type="text" id="testTitle" name="testTitle" placeholder="E.g. Midterm Math Test" required />
+
+        <label for="testClass">Class:</label>
+        <select id="testClass" name="testClass" required>
+          <option value="6">Class 6</option>
+          <option value="7">Class 7</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+
+        <label for="testSubject">Subject:</label>
+        <select id="testSubject" name="testSubject" required>
+          <option value="math">Math</option>
+          <option value="science">Science</option>
+          <option value="english">English</option>
+          <option value="nepali">Nepali</option>
+          <option value="computer">Computer</option>
+        </select>
+
+        <label for="testDate">Date:</label>
+        <input type="date" id="testDate" name="testDate" required />
+
+        <label for="testStartTime">Start Time:</label>
+        <input type="time" id="testStartTime" name="testStartTime" required />
+
+        <label for="testDuration">Duration (minutes):</label>
+        <input type="number" id="testDuration" name="testDuration" min="10" max="180" required />
+
+        <label for="testEnabled">Enabled:</label>
+        <select id="testEnabled" name="testEnabled" required>
+          <option value="true" selected>Yes</option>
+          <option value="false">No</option>
+        </select>
+
+        <button type="submit" class="primary-btn" style="margin-top: 1rem;">Add / Update Test Schedule</button>
+      </form>
+
+      <div style="overflow-x:auto; max-height: 350px; overflow-y: auto;">
+        <table id="testScheduleTable" aria-label="List of test schedules">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Class</th>
+              <th>Subject</th>
+              <th>Date</th>
+              <th>Start Time</th>
+              <th>Duration</th>
+              <th>Enabled</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
     </section>
 
+    <!-- Result Management -->
     <section id="results-management" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navResultsMgmt" hidden>
       <h2>Result Management</h2>
-      <p>Upload and view results, generate reports, and export data.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+      <p>Upload or manually enter test results, search and view performance reports.</p>
+
+      <form id="resultUploadForm" aria-label="Upload Results CSV" style="margin-bottom: 1rem;">
+        <label for="csvFile">Upload Results CSV:</label>
+        <input type="file" id="csvFile" accept=".csv" />
+        <button type="button" id="uploadCsvBtn" class="primary-btn" style="margin-top: 0.5rem;">Upload (UI Only)</button>
+        <p style="font-size: 0.85rem; color: #666;">* CSV upload is UI only, no backend processing.</p>
+      </form>
+
+      <form id="manualResultForm" aria-label="Manual Result Entry" style="max-width: 600px; margin-bottom: 1rem;">
+        <label for="resultStudentEmail">Student Email:</label>
+        <input type="email" id="resultStudentEmail" placeholder="student@example.com" required />
+        <label for="resultTestTitle">Test Title:</label>
+        <input type="text" id="resultTestTitle" placeholder="Test Title" required />
+        <label for="resultScore">Score (0-100):</label>
+        <input type="number" id="resultScore" min="0" max="100" required />
+        <button type="submit" class="primary-btn" style="margin-top: 0.7rem;">Add Result</button>
+      </form>
+
+      <div style="overflow-x:auto; max-height: 350px; overflow-y: auto;">
+        <table id="resultsTable" aria-label="List of results">
+          <thead>
+            <tr>
+              <th>Student Email</th>
+              <th>Test Title</th>
+              <th>Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
     </section>
 
+    <!-- Student Records -->
     <section id="student-records" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navStudentRecords" hidden>
       <h2>Student Records & Profiles</h2>
-      <p>View profiles, track progress, add remarks, and manage account status.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+      <p>View student profiles, progress, add remarks, and suspend/reactivate accounts.</p>
+
+      <div style="overflow-x:auto; max-height: 350px; overflow-y: auto;">
+        <table id="studentsTable" aria-label="List of student profiles">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <dialog id="studentNotesModal" aria-modal="true" role="dialog" aria-labelledby="studentNotesTitle">
+        <form id="studentNotesForm">
+          <h3 id="studentNotesTitle">Edit Student Notes</h3>
+          <textarea id="studentNotesTextarea" rows="6" style="width: 100%;" placeholder="Add remarks or notes here..."></textarea>
+          <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+            <button type="submit" class="primary-btn">Save Notes</button>
+            <button type="button" id="cancelNotesBtn" class="danger-btn">Cancel</button>
+          </div>
+        </form>
+      </dialog>
     </section>
 
+    <!-- Content Management -->
     <section id="content-management" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navContentMgmt" hidden>
       <h2>Website Content Management</h2>
       <p>Manage homepage news, FAQs, banners, and promotional content.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+
+      <!-- News -->
+      <article style="margin-bottom: 2rem;">
+        <h3>Homepage News</h3>
+        <form id="newsForm" style="max-width: 600px; margin-bottom: 1rem;">
+          <label for="newsTitle">Title:</label>
+          <input type="text" id="newsTitle" required />
+          <label for="newsContent">Content:</label>
+          <textarea id="newsContent" rows="4" required></textarea>
+          <button type="submit" class="primary-btn" style="margin-top: 0.5rem;">Add News</button>
+        </form>
+        <ul id="newsList" aria-live="polite" style="max-width: 600px;"></ul>
+      </article>
+
+      <!-- FAQs -->
+      <article style="margin-bottom: 2rem;">
+        <h3>FAQs</h3>
+        <form id="faqForm" style="max-width: 600px; margin-bottom: 1rem;">
+          <label for="faqQuestion">Question:</label>
+          <input type="text" id="faqQuestion" required />
+          <label for="faqAnswer">Answer:</label>
+          <textarea id="faqAnswer" rows="3" required></textarea>
+          <button type="submit" class="primary-btn" style="margin-top: 0.5rem;">Add FAQ</button>
+        </form>
+        <ul id="faqList" aria-live="polite" style="max-width: 600px;"></ul>
+      </article>
+
+      <!-- Banners -->
+      <article>
+        <h3>Banners</h3>
+        <form id="bannerForm" style="max-width: 600px; margin-bottom: 1rem;">
+          <label for="bannerImageUrl">Image URL:</label>
+          <input type="url" id="bannerImageUrl" required />
+          <label for="bannerLinkUrl">Link URL:</label>
+          <input type="url" id="bannerLinkUrl" required />
+          <button type="submit" class="primary-btn" style="margin-top: 0.5rem;">Add Banner</button>
+        </form>
+        <ul id="bannerList" aria-live="polite" style="max-width: 600px;"></ul>
+      </article>
     </section>
 
+    <!-- Notifications -->
     <section id="notifications" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navNotifications" hidden>
       <h2>Notifications & Communication</h2>
-      <p>Send notifications/emails and manage message templates.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+      <p>Create message templates and send notifications to users (UI only).</p>
+
+      <form id="notificationForm" style="max-width: 600px; margin-bottom: 1rem;">
+        <label for="notifTitle">Notification Title:</label>
+        <input type="text" id="notifTitle" required />
+        <label for="notifMessage">Message:</label>
+        <textarea id="notifMessage" rows="4" required></textarea>
+        <label for="notifRecipients">Send To:</label>
+        <select id="notifRecipients" required>
+          <option value="students">Students</option>
+          <option value="admins">Admins</option>
+          <option value="all">All Users</option>
+        </select>
+        <button type="submit" class="primary-btn" style="margin-top: 0.5rem;">Send Notification</button>
+      </form>
+
+      <h3>Notification History</h3>
+      <ul id="notificationHistory" style="max-width: 600px; max-height: 250px; overflow-y: auto;"></ul>
     </section>
 
+    <!-- Security & Access -->
     <section id="security-access" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navSecurity" hidden>
       <h2>Security & Access Control</h2>
       <p>Manage login sessions, view login history, and set password policies.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+
+      <h3>Login History</h3>
+      <table id="loginHistoryTable" style="max-width: 700px; margin-bottom: 1rem;">
+        <thead>
+          <tr>
+            <th>User Email</th>
+            <th>IP Address</th>
+            <th>Date & Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+
+      <button id="forceLogoutBtn" class="danger-btn" style="margin-bottom: 1rem;">Force Logout All Users</button>
+
+      <form id="passwordPolicyForm" style="max-width: 400px;">
+        <h3>Password Policy</h3>
+        <label for="minPassLength">Minimum Password Length:</label>
+        <input type="number" id="minPassLength" min="4" max="20" value="6" required />
+        <label for="requireSpecialChar">
+          <input type="checkbox" id="requireSpecialChar" /> Require special characters
+        </label>
+        <label for="requireNumbers">
+          <input type="checkbox" id="requireNumbers" /> Require numbers
+        </label>
+        <button type="submit" class="primary-btn" style="margin-top: 0.5rem;">Save Policy</button>
+      </form>
     </section>
 
+    <!-- Settings -->
     <section id="settings" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navSettings" hidden>
       <h2>Settings & Configuration</h2>
-      <p>Configure site-wide settings, test parameters, and backups.</p>
-      <p><em>(Feature UI placeholder — to be implemented)</em></p>
-    </section>
+      <p>Configure site-wide settings and test parameters.</p>
 
+      <form id="settingsForm" style="max-width: 400px;">
+        <label for="siteTimezone">Time Zone:</label>
+        <select id="siteTimezone" required>
+          <option value="UTC">UTC</option>
+          <option value="Asia/Kathmandu" selected>Asia/Kathmandu</option>
+          <option value="America/New_York">America/New_York</option>
+          <option value="Europe/London">Europe/London</option>
+          <!-- Add more timezones as needed -->
+        </select>
+
+        <label for="siteLanguage">Language:</label>
+        <select id="siteLanguage" required>
+          <option value="en" selected>English</option>
+          <option value="ne">Nepali</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+        </select>
+
+        <label for="defaultTestTimeLimit">Default Test Time Limit (minutes):</label>
+        <input type="number" id="defaultTestTimeLimit" min="5" max="180" value="60" required />
+
+        <label for="maxTestAttempts">Max Test Attempts:</label>
+        <input type="number" id="maxTestAttempts" min="1" max="10" value="3" required />
+
+        <button type="submit" class="primary-btn" style="margin-top: 1rem;">Save Settings</button>
+      </form>
+
+      <div style="margin-top: 2rem;">
+        <h3>Backup & Restore</h3>
+        <p><em>UI placeholders - connect with backend to implement actual backup/restore.</em></p>
+        <button id="backupBtn" class="primary-btn" style="margin-right: 1rem;">Backup Data</button>
+        <button id="restoreBtn" class="primary-btn">Restore Data</button>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -571,7 +782,6 @@
     // LOGOUT BUTTON FUNCTIONALITY
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if(confirm('Are you sure you want to logout?')) {
-        // Redirect to login or homepage (adjust path as needed)
         window.location.href = 'login.html';
       }
     });
@@ -579,10 +789,14 @@
     // ====================
     // USER MANAGEMENT
     // ====================
-    let users = [];
+    let users = [
+      {email: "student1@example.com", password: "pass123", role: "student", suspended: false, notes: ""},
+      {email: "admin@example.com", password: "adminpass", role: "admin", suspended: false, notes: ""}
+    ];
 
     const userForm = document.getElementById('userForm');
     const usersUl = document.getElementById('usersUl');
+    let editingUserIndex = null;
 
     function renderUsers() {
       usersUl.innerHTML = '';
@@ -592,9 +806,10 @@
       }
       users.forEach((user, idx) => {
         const li = document.createElement('li');
+        li.style.marginBottom = '0.5rem';
         li.innerHTML = `
-          <span>${user.email} (${user.role})</span>
-          <div>
+          <span>${user.email} (${user.role})${user.suspended ? ' [Suspended]' : ''}</span>
+          <div style="display:inline-block; float:right;">
             <button aria-label="Edit user ${user.email}" onclick="editUser(${idx})">Edit</button>
             <button class="danger-btn" aria-label="Delete user ${user.email}" onclick="deleteUser(${idx})">Delete</button>
           </div>
@@ -619,8 +834,6 @@
       }
     }
 
-    let editingUserIndex = null;
-
     userForm.addEventListener('submit', e => {
       e.preventDefault();
       const email = userForm.userEmail.value.trim();
@@ -632,156 +845,138 @@
         return;
       }
 
-      // Add new or update existing
       if(editingUserIndex !== null) {
-        users[editingUserIndex] = {email, password, role};
+        users[editingUserIndex] = {...users[editingUserIndex], email, password, role};
         editingUserIndex = null;
       } else {
-        // Check duplicates
+        // prevent duplicate emails
         if(users.some(u => u.email === email)) {
           alert('User with this email already exists.');
           return;
         }
-        users.push({email, password, role});
+        users.push({email, password, role, suspended:false, notes:""});
       }
       userForm.reset();
       renderUsers();
     });
 
+    renderUsers();
+
     // ====================
     // QUESTION BANK MANAGEMENT
     // ====================
-    let questionBank = [];
 
-    // Generate sample questions
-    const classes = ['6','7','8','9','10','11','12'];
-    const subjects = ['math','science','english','nepali','computer'];
-    const difficulties = ['easy','medium','hard'];
-
-    for(let i=1; i<=100; i++) {
-      questionBank.push({
-        id: i,
-        class: classes[i % classes.length],
-        subject: subjects[i % subjects.length],
-        difficulty: difficulties[i % difficulties.length],
-        question: `Sample question number ${i}?`,
-        options: [
-          `Option A for Q${i}`,
-          `Option B for Q${i}`,
-          `Option C for Q${i}`,
-          `Option D for Q${i}`
-        ],
-        answer: 1 + (i % 4)
-      });
-    }
-
-    const questionsTableBody = document.querySelector('#questionsTable tbody');
-    const filterForm = document.getElementById('filterForm');
-    const addQuestionBtn = document.getElementById('addQuestionBtn');
-    const questionModal = document.getElementById('questionModal');
-    const questionForm = document.getElementById('questionForm');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-
+    let questions = [];
     let editingQuestionId = null;
 
-    function renderQuestions() {
-      const classFilter = filterForm.classSelect.value;
-      const subjectFilter = filterForm.subjectSelect.value;
-      const difficultyFilter = filterForm.difficultySelect.value;
+    const questionModal = document.getElementById('questionModal');
+    const questionForm = document.getElementById('questionForm');
+    const questionsTableBody = document.querySelector('#questionsTable tbody');
+    const filterForm = document.getElementById('filterForm');
 
-      const filtered = questionBank.filter(q =>
-        q.class === classFilter &&
-        q.subject === subjectFilter &&
-        q.difficulty === difficultyFilter
-      );
+    function renderQuestions(filter = {}) {
+      let filtered = questions;
+
+      if(filter.classSelect) filtered = filtered.filter(q => q.class === filter.classSelect);
+      if(filter.subjectSelect) filtered = filtered.filter(q => q.subject === filter.subjectSelect);
+      if(filter.difficultySelect) filtered = filtered.filter(q => q.difficulty === filter.difficultySelect);
 
       questionsTableBody.innerHTML = '';
-
       if(filtered.length === 0) {
-        questionsTableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:1rem;">No questions found for selected filters.</td></tr>`;
+        questionsTableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No questions found.</td></tr>`;
         return;
       }
-
-      filtered.forEach(q => {
+      filtered.forEach((q, idx) => {
         const tr = document.createElement('tr');
+        const opts = q.options.map((opt, i) => `<div>${i+1}. ${opt}</div>`).join('');
         tr.innerHTML = `
           <td>${q.id}</td>
           <td>${q.class}</td>
           <td>${q.subject}</td>
           <td>${q.difficulty}</td>
-          <td title="${q.question}">${q.question.length > 50 ? q.question.slice(0, 50) + '...' : q.question}</td>
+          <td style="max-width: 250px;">${q.text}</td>
+          <td>${opts}</td>
+          <td>${q.answer}</td>
           <td>
-            1) ${q.options[0]}<br>
-            2) ${q.options[1]}<br>
-            3) ${q.options[2]}<br>
-            4) ${q.options[3]}
-          </td>
-          <td>Option ${q.answer}</td>
-          <td>
-            <button onclick="editQuestion(${q.id})" aria-label="Edit question ${q.id}">Edit</button>
-            <button onclick="deleteQuestion(${q.id})" class="danger-btn" aria-label="Delete question ${q.id}">Delete</button>
+            <button onclick="editQuestion('${q.id}')" aria-label="Edit question ${q.id}">Edit</button>
+            <button class="danger-btn" onclick="deleteQuestion('${q.id}')" aria-label="Delete question ${q.id}">Delete</button>
           </td>
         `;
         questionsTableBody.appendChild(tr);
       });
     }
 
-    filterForm.addEventListener('submit', e => {
-      e.preventDefault();
-      renderQuestions();
-    });
+    function generateQuestionId() {
+      return 'q' + Math.random().toString(36).slice(2, 10);
+    }
 
-    addQuestionBtn.addEventListener('click', () => {
+    document.getElementById('addQuestionBtn').addEventListener('click', () => {
       editingQuestionId = null;
       questionForm.reset();
       questionModal.querySelector('h3').textContent = 'Add New Question';
       questionModal.showModal();
     });
 
-    cancelModalBtn.addEventListener('click', () => {
-      questionModal.close();
-    });
-
     questionForm.addEventListener('submit', e => {
       e.preventDefault();
 
-      const newQuestion = {
-        id: editingQuestionId ?? (questionBank.length ? questionBank[questionBank.length - 1].id + 1 : 1),
-        class: questionForm.qClass.value,
-        subject: questionForm.qSubject.value,
-        difficulty: questionForm.qDifficulty.value,
-        question: questionForm.qText.value.trim(),
-        options: [
-          questionForm.opt1.value.trim(),
-          questionForm.opt2.value.trim(),
-          questionForm.opt3.value.trim(),
-          questionForm.opt4.value.trim(),
-        ],
-        answer: parseInt(questionForm.qAnswer.value)
-      };
+      const qClass = questionForm.qClass.value;
+      const qSubject = questionForm.qSubject.value;
+      const qDifficulty = questionForm.qDifficulty.value;
+      const qText = questionForm.qText.value.trim();
+      const opt1 = questionForm.opt1.value.trim();
+      const opt2 = questionForm.opt2.value.trim();
+      const opt3 = questionForm.opt3.value.trim();
+      const opt4 = questionForm.opt4.value.trim();
+      const qAnswer = questionForm.qAnswer.value;
+
+      if(!qText || !opt1 || !opt2 || !opt3 || !opt4) {
+        alert('Please fill all question and option fields.');
+        return;
+      }
 
       if(editingQuestionId) {
-        const idx = questionBank.findIndex(q => q.id === editingQuestionId);
+        const idx = questions.findIndex(q => q.id === editingQuestionId);
         if(idx !== -1) {
-          questionBank[idx] = newQuestion;
+          questions[idx] = {
+            id: editingQuestionId,
+            class: qClass,
+            subject: qSubject,
+            difficulty: qDifficulty,
+            text: qText,
+            options: [opt1, opt2, opt3, opt4],
+            answer: qAnswer
+          };
         }
       } else {
-        questionBank.push(newQuestion);
+        questions.push({
+          id: generateQuestionId(),
+          class: qClass,
+          subject: qSubject,
+          difficulty: qDifficulty,
+          text: qText,
+          options: [opt1, opt2, opt3, opt4],
+          answer: qAnswer
+        });
       }
 
       questionModal.close();
-      renderQuestions();
+      renderQuestions(getCurrentFilters());
     });
 
-    window.editQuestion = function(id) {
-      const q = questionBank.find(q => q.id === id);
-      if(!q) return alert('Question not found');
+    document.getElementById('cancelModalBtn').addEventListener('click', () => {
+      questionModal.close();
+    });
 
+    function editQuestion(id) {
+      const q = questions.find(q => q.id === id);
+      if(!q) return;
       editingQuestionId = id;
+
       questionForm.qClass.value = q.class;
       questionForm.qSubject.value = q.subject;
       questionForm.qDifficulty.value = q.difficulty;
-      questionForm.qText.value = q.question;
+      questionForm.qText.value = q.text;
       questionForm.opt1.value = q.options[0];
       questionForm.opt2.value = q.options[1];
       questionForm.opt3.value = q.options[2];
@@ -790,20 +985,480 @@
 
       questionModal.querySelector('h3').textContent = 'Edit Question';
       questionModal.showModal();
-    };
+    }
 
-    window.deleteQuestion = function(id) {
+    function deleteQuestion(id) {
       if(confirm('Are you sure you want to delete this question?')) {
-        questionBank = questionBank.filter(q => q.id !== id);
-        renderQuestions();
+        questions = questions.filter(q => q.id !== id);
+        renderQuestions(getCurrentFilters());
       }
-    };
-    // Initial load
-    window.onload = () => {
-      renderUsers();
-      renderQuestions();
-    };
-  </script>
+    }
 
+    filterForm.addEventListener('submit', e => {
+      e.preventDefault();
+      renderQuestions(getCurrentFilters());
+    });
+
+    function getCurrentFilters() {
+      return {
+        classSelect: filterForm.classSelect.value,
+        subjectSelect: filterForm.subjectSelect.value,
+        difficultySelect: filterForm.difficultySelect.value
+      };
+    }
+
+    renderQuestions();
+
+    // ====================
+    // TEST SCHEDULING
+    // ====================
+    let testSchedules = [];
+
+    const testScheduleForm = document.getElementById('testScheduleForm');
+    const testScheduleTableBody = document.querySelector('#testScheduleTable tbody');
+    let editingTestIndex = null;
+
+    function renderTestSchedules() {
+      testScheduleTableBody.innerHTML = '';
+      if(testSchedules.length === 0) {
+        testScheduleTableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No test schedules created.</td></tr>`;
+        return;
+      }
+      testSchedules.forEach((test, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${test.title}</td>
+          <td>${test.class}</td>
+          <td>${test.subject}</td>
+          <td>${test.date}</td>
+          <td>${test.startTime}</td>
+          <td>${test.duration} mins</td>
+          <td>${test.enabled ? 'Yes' : 'No'}</td>
+          <td>
+            <button onclick="editTestSchedule(${idx})" aria-label="Edit test schedule ${test.title}">Edit</button>
+            <button class="danger-btn" onclick="deleteTestSchedule(${idx})" aria-label="Delete test schedule ${test.title}">Delete</button>
+          </td>
+        `;
+        testScheduleTableBody.appendChild(tr);
+      });
+    }
+
+    testScheduleForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const title = testScheduleForm.testTitle.value.trim();
+      const classVal = testScheduleForm.testClass.value;
+      const subject = testScheduleForm.testSubject.value;
+      const date = testScheduleForm.testDate.value;
+      const startTime = testScheduleForm.testStartTime.value;
+      const duration = testScheduleForm.testDuration.value;
+      const enabled = testScheduleForm.testEnabled.value === "true";
+
+      if(!title || !classVal || !subject || !date || !startTime || !duration) {
+        alert('Please fill all fields.');
+        return;
+      }
+
+      if(editingTestIndex !== null) {
+        testSchedules[editingTestIndex] = {title, class: classVal, subject, date, startTime, duration, enabled};
+        editingTestIndex = null;
+      } else {
+        testSchedules.push({title, class: classVal, subject, date, startTime, duration, enabled});
+      }
+
+      testScheduleForm.reset();
+      renderTestSchedules();
+    });
+
+    function editTestSchedule(idx) {
+      const test = testSchedules[idx];
+      editingTestIndex = idx;
+      testScheduleForm.testTitle.value = test.title;
+      testScheduleForm.testClass.value = test.class;
+      testScheduleForm.testSubject.value = test.subject;
+      testScheduleForm.testDate.value = test.date;
+      testScheduleForm.testStartTime.value = test.startTime;
+      testScheduleForm.testDuration.value = test.duration;
+      testScheduleForm.testEnabled.value = test.enabled.toString();
+    }
+
+    function deleteTestSchedule(idx) {
+      if(confirm('Are you sure you want to delete this test schedule?')) {
+        testSchedules.splice(idx, 1);
+        if(editingTestIndex === idx) editingTestIndex = null;
+        renderTestSchedules();
+      }
+    }
+
+    renderTestSchedules();
+
+    // ====================
+    // RESULT MANAGEMENT
+    // ====================
+    let results = [];
+
+    const resultsTableBody = document.querySelector('#resultsTable tbody');
+    const manualResultForm = document.getElementById('manualResultForm');
+    const uploadCsvBtn = document.getElementById('uploadCsvBtn');
+    const csvFileInput = document.getElementById('csvFile');
+
+    function renderResults() {
+      resultsTableBody.innerHTML = '';
+      if(results.length === 0) {
+        resultsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No results added.</td></tr>`;
+        return;
+      }
+      results.forEach((res, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${res.studentEmail}</td>
+          <td>${res.testTitle}</td>
+          <td>${res.score}</td>
+          <td><button class="danger-btn" onclick="deleteResult(${idx})" aria-label="Delete result of ${res.studentEmail} for test ${res.testTitle}">Delete</button></td>
+        `;
+        resultsTableBody.appendChild(tr);
+      });
+    }
+
+    manualResultForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const studentEmail = manualResultForm.resultStudentEmail.value.trim();
+      const testTitle = manualResultForm.resultTestTitle.value.trim();
+      const score = manualResultForm.resultScore.value;
+
+      if(!studentEmail || !testTitle || score === '') {
+        alert('Fill all fields.');
+        return;
+      }
+
+      results.push({studentEmail, testTitle, score: Number(score)});
+      manualResultForm.reset();
+      renderResults();
+    });
+
+    function deleteResult(idx) {
+      if(confirm('Delete this result?')) {
+        results.splice(idx, 1);
+        renderResults();
+      }
+    }
+
+    uploadCsvBtn.addEventListener('click', () => {
+      alert('CSV upload is UI-only placeholder. Implement backend to enable upload.');
+    });
+
+    renderResults();
+
+    // ====================
+    // STUDENT RECORDS
+    // ====================
+    // Using users list filtered for students only
+    const studentsTableBody = document.querySelector('#studentsTable tbody');
+    const studentNotesModal = document.getElementById('studentNotesModal');
+    const studentNotesForm = document.getElementById('studentNotesForm');
+    const studentNotesTextarea = document.getElementById('studentNotesTextarea');
+    let currentStudentIndex = null;
+
+    function renderStudents() {
+      studentsTableBody.innerHTML = '';
+      const students = users.filter(u => u.role === 'student');
+      if(students.length === 0) {
+        studentsTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No student records found.</td></tr>`;
+        return;
+      }
+      students.forEach((student, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${student.email}</td>
+          <td>${student.role}</td>
+          <td>${student.suspended ? 'Suspended' : 'Active'}</td>
+          <td>${student.notes ? student.notes : '-'}</td>
+          <td>
+            <button onclick="openNotes(${idx})" aria-label="Add or edit notes for ${student.email}">Notes</button>
+            <button onclick="toggleSuspend(${idx})">${student.suspended ? 'Activate' : 'Suspend'}</button>
+          </td>
+        `;
+        studentsTableBody.appendChild(tr);
+      });
+    }
+
+    function openNotes(idx) {
+      const students = users.filter(u => u.role === 'student');
+      const student = students[idx];
+      currentStudentIndex = users.findIndex(u => u.email === student.email);
+      studentNotesTextarea.value = users[currentStudentIndex].notes || '';
+      studentNotesModal.showModal();
+    }
+
+    studentNotesForm.addEventListener('submit', e => {
+      e.preventDefault();
+      if(currentStudentIndex === null) return;
+      users[currentStudentIndex].notes = studentNotesTextarea.value.trim();
+      studentNotesModal.close();
+      renderStudents();
+    });
+
+    document.getElementById('cancelNotesBtn').addEventListener('click', () => {
+      studentNotesModal.close();
+    });
+
+    function toggleSuspend(idx) {
+      const students = users.filter(u => u.role === 'student');
+      const student = students[idx];
+      const userIndex = users.findIndex(u => u.email === student.email);
+      if(userIndex === -1) return;
+      users[userIndex].suspended = !users[userIndex].suspended;
+      renderStudents();
+      renderUsers(); // Update in user list as well
+    }
+
+    renderStudents();
+
+    // ====================
+    // CONTENT MANAGEMENT
+    // ====================
+    let newsItems = [];
+    let faqs = [];
+    let banners = [];
+
+    // News
+    const newsForm = document.getElementById('newsForm');
+    const newsList = document.getElementById('newsList');
+
+    function renderNews() {
+      if(newsItems.length === 0) {
+        newsList.innerHTML = '<li>No news added yet.</li>';
+        return;
+      }
+      newsList.innerHTML = '';
+      newsItems.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '0.7rem';
+        li.innerHTML = `
+          <strong>${item.title}</strong><br>
+          <span>${item.content}</span><br>
+          <button class="danger-btn" onclick="deleteNews(${idx})" aria-label="Delete news ${item.title}">Delete</button>
+        `;
+        newsList.appendChild(li);
+      });
+    }
+
+    newsForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const title = document.getElementById('newsTitle').value.trim();
+      const content = document.getElementById('newsContent').value.trim();
+      if(!title || !content) {
+        alert('Fill both title and content.');
+        return;
+      }
+      newsItems.push({title, content});
+      newsForm.reset();
+      renderNews();
+    });
+
+    function deleteNews(idx) {
+      if(confirm('Delete this news item?')) {
+        newsItems.splice(idx, 1);
+        renderNews();
+      }
+    }
+
+    renderNews();
+
+    // FAQs
+    const faqForm = document.getElementById('faqForm');
+    const faqList = document.getElementById('faqList');
+
+    function renderFAQs() {
+      if(faqs.length === 0) {
+        faqList.innerHTML = '<li>No FAQs added yet.</li>';
+        return;
+      }
+      faqList.innerHTML = '';
+      faqs.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '0.7rem';
+        li.innerHTML = `
+          <strong>Q: ${item.question}</strong><br>
+          <span>A: ${item.answer}</span><br>
+          <button class="danger-btn" onclick="deleteFAQ(${idx})" aria-label="Delete FAQ question ${item.question}">Delete</button>
+        `;
+        faqList.appendChild(li);
+      });
+    }
+
+    faqForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const question = document.getElementById('faqQuestion').value.trim();
+      const answer = document.getElementById('faqAnswer').value.trim();
+      if(!question || !answer) {
+        alert('Fill both question and answer.');
+        return;
+      }
+      faqs.push({question, answer});
+      faqForm.reset();
+      renderFAQs();
+    });
+
+    function deleteFAQ(idx) {
+      if(confirm('Delete this FAQ?')) {
+        faqs.splice(idx, 1);
+        renderFAQs();
+      }
+    }
+
+    renderFAQs();
+
+    // Banners
+    const bannerForm = document.getElementById('bannerForm');
+    const bannerList = document.getElementById('bannerList');
+
+    function renderBanners() {
+      if(banners.length === 0) {
+        bannerList.innerHTML = '<li>No banners added yet.</li>';
+        return;
+      }
+      bannerList.innerHTML = '';
+      banners.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '0.7rem';
+        li.innerHTML = `
+          <img src="${item.imageUrl}" alt="Banner Image" style="max-width: 100%; height: auto; display: block; margin-bottom: 0.5rem;">
+          <a href="${item.linkUrl}" target="_blank" rel="noopener noreferrer">${item.linkUrl}</a><br>
+          <button class="danger-btn" onclick="deleteBanner(${idx})" aria-label="Delete banner with link ${item.linkUrl}">Delete</button>
+        `;
+        bannerList.appendChild(li);
+      });
+    }
+
+    bannerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const imageUrl = document.getElementById('bannerImageUrl').value.trim();
+      const linkUrl = document.getElementById('bannerLinkUrl').value.trim();
+      if(!imageUrl || !linkUrl) {
+        alert('Fill both image and link URLs.');
+        return;
+      }
+      banners.push({imageUrl, linkUrl});
+      bannerForm.reset();
+      renderBanners();
+    });
+
+    function deleteBanner(idx) {
+      if(confirm('Delete this banner?')) {
+        banners.splice(idx, 1);
+        renderBanners();
+      }
+    }
+
+    renderBanners();
+
+    // ====================
+    // NOTIFICATIONS
+    // ====================
+    let notifications = [];
+
+    const notificationForm = document.getElementById('notificationForm');
+    const notificationHistory = document.getElementById('notificationHistory');
+
+    notificationForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const title = document.getElementById('notifTitle').value.trim();
+      const message = document.getElementById('notifMessage').value.trim();
+      const recipients = document.getElementById('notifRecipients').value;
+
+      if(!title || !message) {
+        alert('Fill title and message.');
+        return;
+      }
+
+      const timestamp = new Date().toLocaleString();
+      notifications.push({title, message, recipients, timestamp});
+      renderNotifications();
+      notificationForm.reset();
+      alert('Notification sent (UI only).');
+    });
+
+    function renderNotifications() {
+      notificationHistory.innerHTML = '';
+      if(notifications.length === 0) {
+        notificationHistory.innerHTML = '<li>No notifications sent yet.</li>';
+        return;
+      }
+      notifications.forEach((notif, idx) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '0.7rem';
+        li.innerHTML = `<strong>${notif.title}</strong> to <em>${notif.recipients}</em> on ${notif.timestamp}<br>${notif.message}`;
+        notificationHistory.appendChild(li);
+      });
+    }
+
+    renderNotifications();
+
+    // ====================
+    // SECURITY & ACCESS CONTROL
+    // ====================
+    let loginHistory = [];
+
+    const loginHistoryTableBody = document.querySelector('#loginHistoryTable tbody');
+    const forceLogoutBtn = document.getElementById('forceLogoutBtn');
+
+    function renderLoginHistory() {
+      loginHistoryTableBody.innerHTML = '';
+      if(loginHistory.length === 0) {
+        loginHistoryTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No login records.</td></tr>`;
+        return;
+      }
+      loginHistory.forEach((entry, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${entry.email}</td>
+          <td>${entry.ip}</td>
+          <td>${entry.dateTime}</td>
+          <td>${entry.action}</td>
+        `;
+        loginHistoryTableBody.appendChild(tr);
+      });
+    }
+
+    forceLogoutBtn.addEventListener('click', () => {
+      if(confirm('Force logout all users?')) {
+        alert('All users have been logged out (UI only).');
+        // Implement backend session clear to actually force logout
+      }
+    });
+
+    renderLoginHistory();
+
+    const passwordPolicyForm = document.getElementById('passwordPolicyForm');
+    passwordPolicyForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const minLen = passwordPolicyForm.minPassLength.value;
+      const specialCharReq = passwordPolicyForm.requireSpecialChar.checked;
+      const numberReq = passwordPolicyForm.requireNumbers.checked;
+
+      alert(`Password policy saved (UI only):\nMinimum length: ${minLen}\nRequire special characters: ${specialCharReq}\nRequire numbers: ${numberReq}`);
+      // Save settings to backend or local storage as needed
+    });
+
+    // ====================
+    // SETTINGS & CONFIGURATION
+    // ====================
+    const settingsForm = document.getElementById('settingsForm');
+    settingsForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const timezone = settingsForm.siteTimezone.value;
+      const language = settingsForm.siteLanguage.value;
+      const defaultTimeLimit = settingsForm.defaultTestTimeLimit.value;
+      const maxAttempts = settingsForm.maxTestAttempts.value;
+
+      alert(`Settings saved (UI only):\nTimezone: ${timezone}\nLanguage: ${language}\nDefault Test Time Limit: ${defaultTimeLimit} minutes\nMax Test Attempts: ${maxAttempts}`);
+      // Save settings to backend or local storage
+    });
+
+    // ====================
+    // Utility Functions
+    // ====================
+
+  </script>
 </body>
 </html>
