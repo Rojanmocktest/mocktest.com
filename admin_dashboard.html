@@ -1,974 +1,810 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Admin Dashboard - Rojan Mocktest</title>
-<style>
-  /* Reset */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: 100%;
-    background: #f4f7fa;
-    color: #333;
-  }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  /* Layout */
-  #dashboard {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-  }
-  /* Sidebar */
-  aside {
-    background: #27ae60;
-    width: 250px;
-    min-width: 250px;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-  }
-  aside header {
-    font-size: 1.8rem;
-    font-weight: 700;
-    padding: 1.5rem 1.5rem;
-    text-align: center;
-    border-bottom: 2px solid #1e8449;
-    letter-spacing: 1.5px;
-  }
-  nav {
-    flex: 1;
-    overflow-y: auto;
-  }
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  nav li {
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-  }
-  nav li button {
-    width: 100%;
-    background: none;
-    border: none;
-    padding: 1rem 2rem;
-    color: #eafaf1;
-    font-weight: 600;
-    font-size: 1rem;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  nav li button:hover,
-  nav li button.active {
-    background: #1e8449;
-    color: #fff;
-  }
-  nav li button:focus {
-    outline: 3px solid #145214;
-  }
-  /* Main Content */
-  main {
-    flex: 1;
-    padding: 2rem 3rem;
-    overflow-y: auto;
-    background: #fff;
-  }
-  h1 {
-    margin-top: 0;
-    font-weight: 700;
-    color: #27ae60;
-  }
-  h2 {
-    color: #145214;
-    margin-bottom: 1rem;
-  }
-  /* Section containers */
-  section {
-    display: none;
-  }
-  section.active {
-    display: block;
-  }
-  /* Tables */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1.5rem;
-  }
-  th, td {
-    padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  th {
-    background: #27ae60;
-    color: #fff;
-  }
-  tr:nth-child(even) {
-    background: #f9f9f9;
-  }
-  /* Buttons */
-  .btn {
-    background: #27ae60;
-    border: none;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    margin: 0.3rem 0;
-    transition: background-color 0.3s ease;
-  }
-  .btn:hover {
-    background: #1e8449;
-  }
-  /* Forms */
-  form label {
-    display: block;
-    margin: 0.5rem 0 0.2rem;
-    font-weight: 600;
-  }
-  form input, form select, form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    box-sizing: border-box;
-  }
-  form textarea {
-    resize: vertical;
-  }
-  /* Modal */
-  .modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  .modal.active {
-    display: flex;
-  }
-  .modal-content {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    position: relative;
-  }
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  .modal-header h3 {
-    margin: 0;
-    color: #27ae60;
-  }
-  .close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    font-weight: 700;
-    color: #333;
-  }
-  .close-btn:hover {
-    color: #27ae60;
-  }
-  /* Responsive */
-  @media (max-width: 768px) {
-    #dashboard {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rojan Mocktest Admin Dashboard</title>
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body, html {
+      height: 100%;
+      background: #f9fafb;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    a {
+      color: #27ae60;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Header */
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      user-select: none;
+    }
+    #logoutBtn {
+      background: #e74c3c;
+      border: none;
+      padding: 0.5rem 1rem;
+      color: white;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #logoutBtn:hover {
+      background: #c0392b;
+    }
+
+    /* Layout */
+    main {
+      flex: 1;
+      display: flex;
+      background: #ecf0f1;
+    }
+    nav {
+      width: 280px;
+      background: #34495e;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+    }
+    nav h2 {
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      user-select: none;
+    }
+    nav ul {
+      list-style: none;
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+    nav ul li {
+      margin-bottom: 0.75rem;
+    }
+    nav ul li button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      width: 100%;
+      text-align: left;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    nav ul li button:hover, nav ul li button.active {
+      background: #27ae60;
+      font-weight: 700;
+    }
+
+    section.panel {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      background: white;
+      border-radius: 10px;
+      margin: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    section.panel h2 {
+      margin-bottom: 1rem;
+      color: #27ae60;
+      font-weight: 700;
+      font-size: 1.8rem;
+      user-select: none;
+    }
+    section.panel p {
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Buttons */
+    .primary-btn {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .primary-btn:hover {
+      background: #1e8449;
+    }
+    .danger-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 0.4rem 1rem;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .danger-btn:hover {
+      background: #c0392b;
+    }
+    button:focus {
+      outline: 3px solid #2ecc71;
+      outline-offset: 2px;
+    }
+
+    /* Scroll containers */
+    nav ul {
+      max-height: calc(100vh - 150px);
+    }
+    section.panel {
+      max-height: calc(100vh - 3rem);
+    }
+
+    /* Form elements */
+    form label {
+      display: block;
+      font-weight: 600;
+      margin: 0.6rem 0 0.3rem 0;
+      user-select: none;
+    }
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="password"],
+    form select,
+    form textarea {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      border: 1.5px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+      resize: vertical;
+    }
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form input[type="password"]:focus,
+    form select:focus,
+    form textarea:focus {
+      border-color: #27ae60;
+      outline: none;
+    }
+    form textarea {
+      min-height: 60px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 0.5rem 0.75rem;
+      vertical-align: top;
+    }
+    table th {
+      background: #27ae60;
+      color: white;
+      text-align: left;
+      user-select: none;
+    }
+    table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    table button {
+      font-size: 0.85rem;
+      padding: 0.25rem 0.5rem;
+      margin: 0 0.15rem;
+    }
+
+    /* Dialog */
+    dialog {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      padding: 1.5rem 2rem;
+      width: 90%;
+      max-width: 600px;
+    }
+    dialog::backdrop {
+      background: rgba(0,0,0,0.5);
+    }
+    dialog form {
+      display: flex;
       flex-direction: column;
     }
-    aside {
-      width: 100%;
-      min-width: auto;
-      flex-direction: row;
-      overflow-x: auto;
-      box-shadow: none;
+    dialog h3 {
+      margin-bottom: 1rem;
+      color: #27ae60;
+      user-select: none;
     }
-    aside header {
-      display: none;
+    dialog label {
+      margin-top: 0.8rem;
     }
-    nav li {
-      flex: 1 0 auto;
-      border: none;
+    dialog input, dialog select, dialog textarea {
+      margin-top: 0.3rem;
     }
-    nav li button {
-      padding: 1rem;
-      font-size: 0.9rem;
-      text-align: center;
+    dialog button {
+      margin-top: 1rem;
+      width: fit-content;
     }
-    main {
-      padding: 1rem 1.5rem;
-      height: calc(100vh - 60px);
+
+    /* User Management Form */
+    #userForm {
+      max-width: 500px;
+    }
+    #userList {
+      margin-top: 1rem;
+      max-height: 350px;
       overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.5rem;
     }
-  }
-</style>
+    #userList ul {
+      list-style: none;
+    }
+    #userList ul li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      background: #f0f4f8;
+    }
+    #userList ul li span {
+      font-weight: 600;
+    }
+
+    /* Notification area */
+    #notificationArea {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background: #d4edda;
+      color: #155724;
+      display: none;
+      font-weight: 600;
+    }
+
+    /* Scrollbar style */
+    nav ul::-webkit-scrollbar,
+    #userList::-webkit-scrollbar,
+    #questionsTable tbody::-webkit-scrollbar {
+      width: 8px;
+    }
+    nav ul::-webkit-scrollbar-thumb,
+    #userList::-webkit-scrollbar-thumb,
+    #questionsTable tbody::-webkit-scrollbar-thumb {
+      background: #27ae60;
+      border-radius: 4px;
+    }
+    nav ul::-webkit-scrollbar-track,
+    #userList::-webkit-scrollbar-track,
+    #questionsTable tbody::-webkit-scrollbar-track {
+      background: #ecf0f1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+      }
+      nav {
+        width: 100%;
+        max-height: none;
+        order: 2;
+      }
+      section.panel {
+        margin: 1rem 1rem 2rem 1rem;
+        max-height: none;
+        order: 1;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div id="dashboard" role="main">
-
-  <aside aria-label="Admin Navigation">
-    <header>Rojan Admin</header>
-    <nav>
-      <ul>
-        <li><button class="nav-btn active" data-target="user-management" aria-controls="user-management" aria-selected="true" role="tab">User Management</button></li>
-        <li><button class="nav-btn" data-target="question-bank" aria-controls="question-bank" role="tab" aria-selected="false">Question Bank</button></li>
-        <li><button class="nav-btn" data-target="test-scheduling" aria-controls="test-scheduling" role="tab" aria-selected="false">Test Scheduling</button></li>
-        <li><button class="nav-btn" data-target="result-management" aria-controls="result-management" role="tab" aria-selected="false">Result Management</button></li>
-        <li><button class="nav-btn" data-target="student-profiles" aria-controls="student-profiles" role="tab" aria-selected="false">Student Profiles</button></li>
-        <li><button class="nav-btn" data-target="content-management" aria-controls="content-management" role="tab" aria-selected="false">Content Management</button></li>
-        <li><button class="nav-btn" data-target="notifications" aria-controls="notifications" role="tab" aria-selected="false">Notifications</button></li>
-        <li><button class="nav-btn" data-target="security-settings" aria-controls="security-settings" role="tab" aria-selected="false">Security & Settings</button></li>
-      </ul>
-    </nav>
-  </aside>
+  <header>
+    <h1>Rojan Mocktest Admin Dashboard</h1>
+    <button id="logoutBtn" aria-label="Logout from Admin Dashboard">Logout</button>
+  </header>
 
   <main>
-    <!-- USER MANAGEMENT -->
-    <section id="user-management" class="active" role="tabpanel" tabindex="0" aria-labelledby="tab-user-management">
-      <h1>User Management</h1>
-      <button class="btn" id="add-user-btn">Add New User</button>
+    <nav aria-label="Admin Navigation">
+      <h2>Admin Features</h2>
+      <ul>
+        <li><button id="navUserMgmt" class="active" aria-controls="user-management" aria-selected="true" role="tab">User Management</button></li>
+        <li><button id="navQuestionBank" aria-controls="question-bank" aria-selected="false" role="tab">Question Bank Management</button></li>
+        <li><button id="navTestSchedule" aria-controls="test-scheduling" aria-selected="false" role="tab">Test & Exam Scheduling</button></li>
+        <li><button id="navResultsMgmt" aria-controls="results-management" aria-selected="false" role="tab">Result Management</button></li>
+        <li><button id="navStudentRecords" aria-controls="student-records" aria-selected="false" role="tab">Student Records & Profiles</button></li>
+        <li><button id="navContentMgmt" aria-controls="content-management" aria-selected="false" role="tab">Website Content Management</button></li>
+        <li><button id="navNotifications" aria-controls="notifications" aria-selected="false" role="tab">Notifications & Communication</button></li>
+        <li><button id="navSecurity" aria-controls="security-access" aria-selected="false" role="tab">Security & Access Control</button></li>
+        <li><button id="navSettings" aria-controls="settings" aria-selected="false" role="tab">Settings & Configuration</button></li>
+      </ul>
+    </nav>
 
-      <table aria-label="User Accounts Table">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="user-table-body">
-          <!-- Sample User -->
-          <tr>
-            <td>student1@example.com</td>
-            <td>Student</td>
-            <td>Active</td>
-            <td>
-              <button class="btn edit-user-btn">Edit</button>
-              <button class="btn delete-user-btn" style="background:#e74c3c;">Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>admin@example.com</td>
-            <td>Admin</td>
-            <td>Active</td>
-            <td>
-              <button class="btn edit-user-btn">Edit</button>
-              <button class="btn delete-user-btn" style="background:#e74c3c;">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <section id="user-management" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navUserMgmt">
+      <h2>User Management</h2>
+      <p>Create, update, delete student/admin accounts, assign roles, and reset passwords.</p>
 
-    <!-- QUESTION BANK MANAGEMENT -->
-    <section id="question-bank" role="tabpanel" tabindex="0" aria-labelledby="tab-question-bank">
-      <h1>Question Bank Management</h1>
-      <button class="btn" id="add-question-btn">Add New Question</button>
-      
-      <table aria-label="Question Bank Table">
-        <thead>
-          <tr>
-            <th>Question</th>
-            <th>Subject</th>
-            <th>Class</th>
-            <th>Difficulty</th>
-            <th>Tags</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="question-table-body">
-          <tr>
-            <td>What is the capital of Nepal?</td>
-            <td>Geography</td>
-            <td>7</td>
-            <td>Easy</td>
-            <td>Capital, Nepal</td>
-            <td>
-              <button class="btn edit-question-btn">Edit</button>
-              <button class="btn delete-question-btn" style="background:#e74c3c;">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+      <form id="userForm" aria-label="Create or Update User">
+        <label for="userEmail">Email:</label>
+        <input type="email" id="userEmail" name="userEmail" placeholder="example@domain.com" required />
+        
+        <label for="userPassword">Password:</label>
+        <input type="password" id="userPassword" name="userPassword" placeholder="Password" required minlength="6" />
+        
+        <label for="userRole">Role:</label>
+        <select id="userRole" name="userRole" required>
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+          <option value="moderator">Moderator</option>
+        </select>
+        <button type="submit" class="primary-btn" style="margin-top: 1rem;">Add / Update User</button>
+      </form>
 
-    <!-- TEST & EXAM SCHEDULING -->
-    <section id="test-scheduling" role="tabpanel" tabindex="0" aria-labelledby="tab-test-scheduling">
-      <h1>Test & Exam Scheduling</h1>
-      <button class="btn" id="add-test-btn">Create New Test</button>
-      <table aria-label="Test Scheduling Table">
-        <thead>
-          <tr>
-            <th>Test Name</th>
-            <th>Class</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>Duration (min)</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="test-table-body">
-          <tr>
-            <td>Math Test 1</td>
-            <td>8</td>
-            <td>2025-08-15</td>
-            <td>10:00 AM</td>
-            <td>60</td>
-            <td>Enabled</td>
-            <td>
-              <button class="btn edit-test-btn">Edit</button>
-              <button class="btn delete-test-btn" style="background:#e74c3c;">Disable</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- RESULT MANAGEMENT -->
-    <section id="result-management" role="tabpanel" tabindex="0" aria-labelledby="tab-result-management">
-      <h1>Result Management</h1>
-      <button class="btn" id="upload-result-btn">Upload Results</button>
-      <table aria-label="Result Management Table">
-        <thead>
-          <tr>
-            <th>Student</th>
-            <th>Test</th>
-            <th>Score</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="result-table-body">
-          <tr>
-            <td>student1@example.com</td>
-            <td>Math Test 1</td>
-            <td>85%</td>
-            <td>2025-08-16</td>
-            <td>
-              <button class="btn view-result-btn">View</button>
-              <button class="btn delete-result-btn" style="background:#e74c3c;">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- STUDENT PROFILES -->
-    <section id="student-profiles" role="tabpanel" tabindex="0" aria-labelledby="tab-student-profiles">
-      <h1>Student Profiles</h1>
-      <input type="search" id="student-search" placeholder="Search students by email or name" style="padding:0.5rem; width:100%; margin-bottom:1rem; border-radius:6px; border:1px solid #ccc;" aria-label="Search students"/>
-      <table aria-label="Student Profiles Table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Class</th>
-            <th>Status</th>
-            <th>Remarks</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="student-table-body">
-          <tr>
-            <td>Rojan Giri</td>
-            <td>student1@example.com</td>
-            <td>8</td>
-            <td>Active</td>
-            <td>Good progress</td>
-            <td>
-              <button class="btn edit-student-btn">Edit</button>
-              <button class="btn suspend-student-btn" style="background:#e67e22;">Suspend</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- CONTENT MANAGEMENT -->
-    <section id="content-management" role="tabpanel" tabindex="0" aria-labelledby="tab-content-management">
-      <h1>Website Content Management</h1>
-      <button class="btn" id="edit-homepage-btn">Edit Homepage Content</button>
-      <button class="btn" id="edit-faq-btn">Edit FAQs & Rules</button>
-      <button class="btn" id="edit-banners-btn">Manage Banners</button>
-    </section>
-
-    <!-- NOTIFICATIONS -->
-    <section id="notifications" role="tabpanel" tabindex="0" aria-labelledby="tab-notifications">
-      <h1>Notifications & Communication</h1>
-      <button class="btn" id="compose-notification-btn">Compose Notification</button>
-      <div id="notification-templates" style="margin-top:1rem;">
-        <h3>Message Templates (UI Only)</h3>
-        <ul>
-          <li>Test Reminder</li>
-          <li>New Content Announcement</li>
-          <li>Account Alert</li>
-        </ul>
+      <div id="userList" aria-live="polite" aria-label="List of Users">
+        <h3 style="margin-top: 1rem; color: #27ae60;">Registered Users</h3>
+        <ul id="usersUl" tabindex="0"></ul>
       </div>
     </section>
 
-    <!-- SECURITY & SETTINGS -->
-    <section id="security-settings" role="tabpanel" tabindex="0" aria-labelledby="tab-security-settings">
-      <h1>Security & Site Settings</h1>
-      <button class="btn" id="view-login-history-btn">View Login History</button>
-      <button class="btn" id="set-password-policy-btn">Set Password Policy</button>
-      <button class="btn" id="site-settings-btn">Site-wide Settings</button>
-      <button class="btn" id="backup-restore-btn">Backup & Restore (UI Only)</button>
+    <section id="question-bank" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navQuestionBank" hidden>
+      <h2>Question Bank Management</h2>
+      <p>Manage questions by class, subject, and difficulty. Add, edit, or delete MCQs.</p>
+
+      <form id="filterForm" aria-label="Filter Questions" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; max-width: 700px;">
+        <label for="classSelect">Class:</label>
+        <select id="classSelect" name="classSelect" aria-required="true">
+          <option value="6">Class 6</option>
+          <option value="7">Class 7</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+
+        <label for="subjectSelect">Subject:</label>
+        <select id="subjectSelect" name="subjectSelect" aria-required="true">
+          <option value="math">Math</option>
+          <option value="science">Science</option>
+          <option value="english">English</option>
+          <option value="nepali">Nepali</option>
+          <option value="computer">Computer</option>
+        </select>
+
+        <label for="difficultySelect">Difficulty:</label>
+        <select id="difficultySelect" name="difficultySelect" aria-required="true">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+        <button type="submit" class="primary-btn">Filter</button>
+      </form>
+
+      <button id="addQuestionBtn" class="primary-btn" style="margin-top: 1rem;">Add New Question</button>
+
+      <div style="overflow-x:auto; margin-top:1rem; max-height: 450px; overflow-y: auto;">
+        <table id="questionsTable" aria-live="polite" aria-label="List of questions" role="grid">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Class</th>
+              <th>Subject</th>
+              <th>Difficulty</th>
+              <th>Question</th>
+              <th>Options</th>
+              <th>Answer</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add/Edit Question Modal -->
+      <dialog id="questionModal" aria-modal="true" role="dialog" aria-labelledby="modalTitle">
+        <form id="questionForm">
+          <h3 id="modalTitle">Add New Question</h3>
+
+          <label for="qClass">Class:</label>
+          <select id="qClass" name="qClass" required>
+            <option value="6">Class 6</option>
+            <option value="7">Class 7</option>
+            <option value="8">Class 8</option>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+          </select>
+
+          <label for="qSubject">Subject:</label>
+          <select id="qSubject" name="qSubject" required>
+            <option value="math">Math</option>
+            <option value="science">Science</option>
+            <option value="english">English</option>
+            <option value="nepali">Nepali</option>
+            <option value="computer">Computer</option>
+          </select>
+
+          <label for="qDifficulty">Difficulty:</label>
+          <select id="qDifficulty" name="qDifficulty" required>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+
+          <label for="qText">Question Text:</label>
+          <textarea id="qText" name="qText" rows="3" required></textarea>
+
+          <label>Options:</label>
+          <input type="text" id="opt1" name="opt1" placeholder="Option 1" required />
+          <input type="text" id="opt2" name="opt2" placeholder="Option 2" required />
+          <input type="text" id="opt3" name="opt3" placeholder="Option 3" required />
+          <input type="text" id="opt4" name="opt4" placeholder="Option 4" required />
+
+          <label for="qAnswer">Correct Answer:</label>
+          <select id="qAnswer" name="qAnswer" required>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+          </select>
+
+          <div style="margin-top: 1rem; display:flex; gap: 1rem;">
+            <button type="submit" class="primary-btn">Save</button>
+            <button type="button" id="cancelModalBtn" class="danger-btn">Cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </section>
+
+    <section id="test-scheduling" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navTestSchedule" hidden>
+      <h2>Test & Exam Scheduling</h2>
+      <p>Create and assign tests with date, time, and duration. Manage availability.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+    </section>
+
+    <section id="results-management" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navResultsMgmt" hidden>
+      <h2>Result Management</h2>
+      <p>Upload and view results, generate reports, and export data.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+    </section>
+
+    <section id="student-records" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navStudentRecords" hidden>
+      <h2>Student Records & Profiles</h2>
+      <p>View profiles, track progress, add remarks, and manage account status.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+    </section>
+
+    <section id="content-management" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navContentMgmt" hidden>
+      <h2>Website Content Management</h2>
+      <p>Manage homepage news, FAQs, banners, and promotional content.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+    </section>
+
+    <section id="notifications" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navNotifications" hidden>
+      <h2>Notifications & Communication</h2>
+      <p>Send notifications/emails and manage message templates.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+    </section>
+
+    <section id="security-access" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navSecurity" hidden>
+      <h2>Security & Access Control</h2>
+      <p>Manage login sessions, view login history, and set password policies.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
+    </section>
+
+    <section id="settings" class="panel" role="tabpanel" tabindex="0" aria-labelledby="navSettings" hidden>
+      <h2>Settings & Configuration</h2>
+      <p>Configure site-wide settings, test parameters, and backups.</p>
+      <p><em>(Feature UI placeholder — to be implemented)</em></p>
     </section>
 
   </main>
-</div>
 
-<!-- MODALS -->
+  <script>
+    // NAVIGATION TAB SWITCHING
+    const navButtons = document.querySelectorAll('nav ul li button');
+    const panels = document.querySelectorAll('section.panel');
 
-<!-- Add/Edit User Modal -->
-<div class="modal" id="user-modal" role="dialog" aria-modal="true" aria-labelledby="user-modal-title" tabindex="-1">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 id="user-modal-title">Add / Edit User</h3>
-      <button class="close-btn" aria-label="Close User Form">&times;</button>
-    </div>
-    <form id="user-form">
-      <label for="user-email">Email</label>
-      <input type="email" id="user-email" name="user-email" required placeholder="user@example.com" autocomplete="email" />
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        navButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
 
-      <label for="user-role">Role</label>
-      <select id="user-role" name="user-role" required>
-        <option value="">Select role</option>
-        <option value="Student">Student</option>
-        <option value="Admin">Admin</option>
-        <option value="Moderator">Moderator</option>
-      </select>
-
-      <label for="user-status">Status</label>
-      <select id="user-status" name="user-status" required>
-        <option value="Active">Active</option>
-        <option value="Suspended">Suspended</option>
-      </select>
-
-      <label for="user-password">Password</label>
-      <input type="password" id="user-password" name="user-password" placeholder="Enter password" autocomplete="new-password" />
-
-      <div style="margin-top:1rem; text-align: right;">
-        <button type="submit" class="btn">Save</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Add/Edit Question Modal -->
-<div class="modal" id="question-modal" role="dialog" aria-modal="true" aria-labelledby="question-modal-title" tabindex="-1">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 id="question-modal-title">Add / Edit Question</h3>
-      <button class="close-btn" aria-label="Close Question Form">&times;</button>
-    </div>
-    <form id="question-form">
-      <label for="question-text">Question</label>
-      <textarea id="question-text" name="question-text" rows="3" required></textarea>
-
-      <label for="question-subject">Subject</label>
-      <input type="text" id="question-subject" name="question-subject" placeholder="Subject" required />
-
-      <label for="question-class">Class</label>
-      <input type="number" id="question-class" name="question-class" min="1" max="12" required />
-
-      <label for="question-difficulty">Difficulty Level</label>
-      <select id="question-difficulty" name="question-difficulty" required>
-        <option value="">Select difficulty</option>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-      </select>
-
-      <label for="question-tags">Tags (comma separated)</label>
-      <input type="text" id="question-tags" name="question-tags" placeholder="e.g., Algebra, Geometry" />
-
-      <div style="margin-top:1rem; text-align: right;">
-        <button type="submit" class="btn">Save Question</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Add/Edit Test Modal -->
-<div class="modal" id="test-modal" role="dialog" aria-modal="true" aria-labelledby="test-modal-title" tabindex="-1">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 id="test-modal-title">Create / Edit Test</h3>
-      <button class="close-btn" aria-label="Close Test Form">&times;</button>
-    </div>
-    <form id="test-form">
-      <label for="test-name">Test Name</label>
-      <input type="text" id="test-name" name="test-name" required />
-
-      <label for="test-class">Class</label>
-      <input type="number" id="test-class" name="test-class" min="1" max="12" required />
-
-      <label for="test-date">Date</label>
-      <input type="date" id="test-date" name="test-date" required />
-
-      <label for="test-start-time">Start Time</label>
-      <input type="time" id="test-start-time" name="test-start-time" required />
-
-      <label for="test-duration">Duration (minutes)</label>
-      <input type="number" id="test-duration" name="test-duration" min="1" max="240" required />
-
-      <label for="test-status">Status</label>
-      <select id="test-status" name="test-status" required>
-        <option value="Enabled">Enabled</option>
-        <option value="Disabled">Disabled</option>
-      </select>
-
-      <div style="margin-top:1rem; text-align: right;">
-        <button type="submit" class="btn">Save Test</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Upload Results Modal -->
-<div class="modal" id="upload-result-modal" role="dialog" aria-modal="true" aria-labelledby="upload-result-modal-title" tabindex="-1">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 id="upload-result-modal-title">Upload Results</h3>
-      <button class="close-btn" aria-label="Close Upload Result Form">&times;</button>
-    </div>
-    <form id="upload-result-form">
-      <label for="result-student-email">Student Email</label>
-      <input type="email" id="result-student-email" name="result-student-email" required />
-
-      <label for="result-test-name">Test Name</label>
-      <input type="text" id="result-test-name" name="result-test-name" required />
-
-      <label for="result-score">Score (%)</label>
-      <input type="number" id="result-score" name="result-score" min="0" max="100" required />
-
-      <label for="result-date">Date</label>
-      <input type="date" id="result-date" name="result-date" required />
-
-      <div style="margin-top:1rem; text-align: right;">
-        <button type="submit" class="btn">Upload</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-  // NAVIGATION TAB SWITCHING
-  const navButtons = document.querySelectorAll('nav .nav-btn');
-  const sections = document.querySelectorAll('main > section');
-
-  navButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      // Remove active from all buttons and sections
-      navButtons.forEach(btn => {
-        btn.classList.remove('active');
-        btn.setAttribute('aria-selected', 'false');
+        const targetId = button.getAttribute('aria-controls');
+        panels.forEach(panel => {
+          if(panel.id === targetId) {
+            panel.hidden = false;
+            panel.focus();
+          } else {
+            panel.hidden = true;
+          }
+        });
       });
-      sections.forEach(sec => sec.classList.remove('active'));
-
-      // Add active to clicked button and target section
-      button.classList.add('active');
-      button.setAttribute('aria-selected', 'true');
-      const target = button.dataset.target;
-      document.getElementById(target).classList.add('active');
-      document.getElementById(target).focus();
     });
-  });
 
-  // Modal handling helper functions
-  function openModal(modal) {
-    modal.classList.add('active');
-    modal.focus();
-  }
-  function closeModal(modal) {
-    modal.classList.remove('active');
-  }
-
-  // Close modal on clicking close button or outside modal content
-  document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if(e.target === modal) {
-        closeModal(modal);
+    // LOGOUT BUTTON FUNCTIONALITY
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if(confirm('Are you sure you want to logout?')) {
+        // Redirect to login or homepage (adjust path as needed)
+        window.location.href = 'login.html';
       }
     });
-    modal.querySelector('.close-btn').addEventListener('click', () => closeModal(modal));
-  });
 
-  // USER MANAGEMENT MODAL LOGIC
-  const userModal = document.getElementById('user-modal');
-  const addUserBtn = document.getElementById('add-user-btn');
-  const userForm = document.getElementById('user-form');
-  const userTableBody = document.getElementById('user-table-body');
-  let editingUserRow = null;
+    // ====================
+    // USER MANAGEMENT
+    // ====================
+    let users = [];
 
-  addUserBtn.addEventListener('click', () => {
-    userForm.reset();
-    editingUserRow = null;
-    userModal.querySelector('h3').textContent = 'Add User';
-    openModal(userModal);
-  });
+    const userForm = document.getElementById('userForm');
+    const usersUl = document.getElementById('usersUl');
 
-  userTableBody.addEventListener('click', (e) => {
-    if(e.target.classList.contains('edit-user-btn')) {
-      editingUserRow = e.target.closest('tr');
-      const cells = editingUserRow.cells;
-      userForm['user-email'].value = cells[0].textContent;
-      userForm['user-role'].value = cells[1].textContent;
-      userForm['user-status'].value = cells[2].textContent;
-      userForm['user-password'].value = '';
-      userModal.querySelector('h3').textContent = 'Edit User';
-      openModal(userModal);
-    } else if(e.target.classList.contains('delete-user-btn')) {
+    function renderUsers() {
+      usersUl.innerHTML = '';
+      if(users.length === 0) {
+        usersUl.innerHTML = '<li>No users registered yet.</li>';
+        return;
+      }
+      users.forEach((user, idx) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span>${user.email} (${user.role})</span>
+          <div>
+            <button aria-label="Edit user ${user.email}" onclick="editUser(${idx})">Edit</button>
+            <button class="danger-btn" aria-label="Delete user ${user.email}" onclick="deleteUser(${idx})">Delete</button>
+          </div>
+        `;
+        usersUl.appendChild(li);
+      });
+    }
+
+    function editUser(idx) {
+      const user = users[idx];
+      document.getElementById('userEmail').value = user.email;
+      document.getElementById('userPassword').value = user.password;
+      document.getElementById('userRole').value = user.role;
+      editingUserIndex = idx;
+    }
+
+    function deleteUser(idx) {
       if(confirm('Are you sure you want to delete this user?')) {
-        e.target.closest('tr').remove();
+        users.splice(idx, 1);
+        if(editingUserIndex === idx) editingUserIndex = null;
+        renderUsers();
       }
     }
-  });
 
-  userForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = userForm['user-email'].value.trim();
-    const role = userForm['user-role'].value;
-    const status = userForm['user-status'].value;
+    let editingUserIndex = null;
 
-    if(editingUserRow) {
-      // Update existing
-      editingUserRow.cells[0].textContent = email;
-      editingUserRow.cells[1].textContent = role;
-      editingUserRow.cells[2].textContent = status;
-    } else {
-      // Add new
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${email}</td>
-        <td>${role}</td>
-        <td>${status}</td>
-        <td>
-          <button class="btn edit-user-btn">Edit</button>
-          <button class="btn delete-user-btn" style="background:#e74c3c;">Delete</button>
-        </td>
-      `;
-      userTableBody.appendChild(tr);
-    }
-    closeModal(userModal);
-  });
+    userForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = userForm.userEmail.value.trim();
+      const password = userForm.userPassword.value;
+      const role = userForm.userRole.value;
 
-  // QUESTION BANK MODAL LOGIC
-  const questionModal = document.getElementById('question-modal');
-  const addQuestionBtn = document.getElementById('add-question-btn');
-  const questionForm = document.getElementById('question-form');
-  const questionTableBody = document.getElementById('question-table-body');
-  let editingQuestionRow = null;
-
-  addQuestionBtn.addEventListener('click', () => {
-    questionForm.reset();
-    editingQuestionRow = null;
-    questionModal.querySelector('h3').textContent = 'Add Question';
-    openModal(questionModal);
-  });
-
-  questionTableBody.addEventListener('click', (e) => {
-    if(e.target.classList.contains('edit-question-btn')) {
-      editingQuestionRow = e.target.closest('tr');
-      const cells = editingQuestionRow.cells;
-      questionForm['question-text'].value = cells[0].textContent;
-      questionForm['question-subject'].value = cells[1].textContent;
-      questionForm['question-class'].value = cells[2].textContent;
-      questionForm['question-difficulty'].value = cells[3].textContent;
-      questionForm['question-tags'].value = cells[4].textContent;
-      questionModal.querySelector('h3').textContent = 'Edit Question';
-      openModal(questionModal);
-    } else if(e.target.classList.contains('delete-question-btn')) {
-      if(confirm('Delete this question?')) {
-        e.target.closest('tr').remove();
+      if(!email || !password || !role) {
+        alert('All fields are required.');
+        return;
       }
-    }
-  });
 
-  questionForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const question = questionForm['question-text'].value.trim();
-    const subject = questionForm['question-subject'].value.trim();
-    const cls = questionForm['question-class'].value.trim();
-    const diff = questionForm['question-difficulty'].value;
-    const tags = questionForm['question-tags'].value.trim();
-
-    if(editingQuestionRow) {
-      const cells = editingQuestionRow.cells;
-      cells[0].textContent = question;
-      cells[1].textContent = subject;
-      cells[2].textContent = cls;
-      cells[3].textContent = diff;
-      cells[4].textContent = tags;
-    } else {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${question}</td>
-        <td>${subject}</td>
-        <td>${cls}</td>
-        <td>${diff}</td>
-        <td>${tags}</td>
-        <td>
-          <button class="btn edit-question-btn">Edit</button>
-          <button class="btn delete-question-btn" style="background:#e74c3c;">Delete</button>
-        </td>
-      `;
-      questionTableBody.appendChild(tr);
-    }
-    closeModal(questionModal);
-  });
-
-  // TEST SCHEDULING MODAL LOGIC
-  const testModal = document.getElementById('test-modal');
-  const addTestBtn = document.getElementById('add-test-btn');
-  const testForm = document.getElementById('test-form');
-  const testTableBody = document.getElementById('test-table-body');
-  let editingTestRow = null;
-
-  addTestBtn.addEventListener('click', () => {
-    testForm.reset();
-    editingTestRow = null;
-    testModal.querySelector('h3').textContent = 'Create Test';
-    openModal(testModal);
-  });
-
-  testTableBody.addEventListener('click', (e) => {
-    if(e.target.classList.contains('edit-test-btn')) {
-      editingTestRow = e.target.closest('tr');
-      const cells = editingTestRow.cells;
-      testForm['test-name'].value = cells[0].textContent;
-      testForm['test-class'].value = cells[1].textContent;
-      testForm['test-date'].value = cells[2].textContent;
-      testForm['test-start-time'].value = convertTimeTo24h(cells[3].textContent);
-      testForm['test-duration'].value = cells[4].textContent;
-      testForm['test-status'].value = cells[5].textContent;
-      testModal.querySelector('h3').textContent = 'Edit Test';
-      openModal(testModal);
-    } else if(e.target.classList.contains('delete-test-btn')) {
-      if(confirm('Disable this test?')) {
-        // Toggle status text and button text
-        let row = e.target.closest('tr');
-        let statusCell = row.cells[5];
-        if(statusCell.textContent === 'Enabled') {
-          statusCell.textContent = 'Disabled';
-          e.target.textContent = 'Enable';
-          e.target.style.background = '#27ae60';
-        } else {
-          statusCell.textContent = 'Enabled';
-          e.target.textContent = 'Disable';
-          e.target.style.background = '#e74c3c';
-        }
-      }
-    }
-  });
-
-  testForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = testForm['test-name'].value.trim();
-    const cls = testForm['test-class'].value.trim();
-    const date = testForm['test-date'].value;
-    const startTime = testForm['test-start-time'].value;
-    const duration = testForm['test-duration'].value.trim();
-    const status = testForm['test-status'].value;
-
-    if(editingTestRow) {
-      const cells = editingTestRow.cells;
-      cells[0].textContent = name;
-      cells[1].textContent = cls;
-      cells[2].textContent = date;
-      cells[3].textContent = convertTimeTo12h(startTime);
-      cells[4].textContent = duration;
-      cells[5].textContent = status;
-      // Adjust button text & color accordingly
-      const btn = cells[6].querySelector('button.delete-test-btn');
-      if(status === 'Enabled') {
-        btn.textContent = 'Disable';
-        btn.style.background = '#e74c3c';
+      // Add new or update existing
+      if(editingUserIndex !== null) {
+        users[editingUserIndex] = {email, password, role};
+        editingUserIndex = null;
       } else {
-        btn.textContent = 'Enable';
-        btn.style.background = '#27ae60';
+        // Check duplicates
+        if(users.some(u => u.email === email)) {
+          alert('User with this email already exists.');
+          return;
+        }
+        users.push({email, password, role});
       }
-    } else {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${name}</td>
-        <td>${cls}</td>
-        <td>${date}</td>
-        <td>${convertTimeTo12h(startTime)}</td>
-        <td>${duration}</td>
-        <td>${status}</td>
-        <td>
-          <button class="btn edit-test-btn">Edit</button>
-          <button class="btn delete-test-btn" style="background:${status==='Enabled' ? '#e74c3c' : '#27ae60'};">
-            ${status==='Enabled' ? 'Disable' : 'Enable'}
-          </button>
-        </td>
-      `;
-      testTableBody.appendChild(tr);
-    }
-    closeModal(testModal);
-  });
-
-  // Helper: Convert 12h format to 24h (for editing time)
-  function convertTimeTo24h(time12h) {
-    const [time, modifier] = time12h.split(' ');
-    let [hours, minutes] = time.split(':').map(Number);
-    if (modifier.toLowerCase() === 'pm' && hours !== 12) {
-      hours += 12;
-    }
-    if (modifier.toLowerCase() === 'am' && hours === 12) {
-      hours = 0;
-    }
-    return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
-  }
-  // Helper: Convert 24h to 12h for display
-  function convertTimeTo12h(time24h) {
-    let [hours, minutes] = time24h.split(':').map(Number);
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    return `${hours}:${minutes.toString().padStart(2,'0')} ${ampm}`;
-  }
-
-  // RESULT MANAGEMENT MODAL LOGIC
-  const uploadResultModal = document.getElementById('upload-result-modal');
-  const uploadResultBtn = document.getElementById('upload-result-btn');
-  const uploadResultForm = document.getElementById('upload-result-form');
-  const resultTableBody = document.getElementById('result-table-body');
-
-  uploadResultBtn.addEventListener('click', () => {
-    uploadResultForm.reset();
-    openModal(uploadResultModal);
-  });
-
-  uploadResultForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const studentEmail = uploadResultForm['result-student-email'].value.trim();
-    const testName = uploadResultForm['result-test-name'].value.trim();
-    const score = uploadResultForm['result-score'].value.trim();
-    const date = uploadResultForm['result-date'].value;
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${studentEmail}</td>
-      <td>${testName}</td>
-      <td>${score}%</td>
-      <td>${date}</td>
-      <td>
-        <button class="btn view-result-btn">View</button>
-        <button class="btn delete-result-btn" style="background:#e74c3c;">Delete</button>
-      </td>
-    `;
-    resultTableBody.appendChild(tr);
-    closeModal(uploadResultModal);
-  });
-
-  // Result table actions
-  resultTableBody.addEventListener('click', (e) => {
-    if(e.target.classList.contains('delete-result-btn')) {
-      if(confirm('Delete this result?')) {
-        e.target.closest('tr').remove();
-      }
-    } else if(e.target.classList.contains('view-result-btn')) {
-      alert('Detailed result view is not implemented (UI-only demo).');
-    }
-  });
-
-  // STUDENT PROFILE SEARCH FILTER
-  const studentSearchInput = document.getElementById('student-search');
-  const studentTableBody = document.getElementById('student-table-body');
-
-  studentSearchInput.addEventListener('input', () => {
-    const filter = studentSearchInput.value.toLowerCase();
-    const rows = studentTableBody.querySelectorAll('tr');
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(filter) ? '' : 'none';
+      userForm.reset();
+      renderUsers();
     });
-  });
 
-  // STUDENT PROFILES ACTIONS (Edit & Suspend)
-  studentTableBody.addEventListener('click', (e) => {
-    if(e.target.classList.contains('edit-student-btn')) {
-      alert('Edit student profile form not implemented (UI-only demo).');
-    } else if(e.target.classList.contains('suspend-student-btn')) {
-      const btn = e.target;
-      const row = btn.closest('tr');
-      const statusCell = row.cells[3];
-      if(statusCell.textContent === 'Active') {
-        if(confirm('Suspend this student account?')) {
-          statusCell.textContent = 'Suspended';
-          btn.textContent = 'Activate';
-          btn.style.background = '#27ae60';
+    // ====================
+    // QUESTION BANK MANAGEMENT
+    // ====================
+    let questionBank = [];
+
+    // Generate sample questions
+    const classes = ['6','7','8','9','10','11','12'];
+    const subjects = ['math','science','english','nepali','computer'];
+    const difficulties = ['easy','medium','hard'];
+
+    for(let i=1; i<=100; i++) {
+      questionBank.push({
+        id: i,
+        class: classes[i % classes.length],
+        subject: subjects[i % subjects.length],
+        difficulty: difficulties[i % difficulties.length],
+        question: `Sample question number ${i}?`,
+        options: [
+          `Option A for Q${i}`,
+          `Option B for Q${i}`,
+          `Option C for Q${i}`,
+          `Option D for Q${i}`
+        ],
+        answer: 1 + (i % 4)
+      });
+    }
+
+    const questionsTableBody = document.querySelector('#questionsTable tbody');
+    const filterForm = document.getElementById('filterForm');
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+    const questionModal = document.getElementById('questionModal');
+    const questionForm = document.getElementById('questionForm');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
+
+    let editingQuestionId = null;
+
+    function renderQuestions() {
+      const classFilter = filterForm.classSelect.value;
+      const subjectFilter = filterForm.subjectSelect.value;
+      const difficultyFilter = filterForm.difficultySelect.value;
+
+      const filtered = questionBank.filter(q =>
+        q.class === classFilter &&
+        q.subject === subjectFilter &&
+        q.difficulty === difficultyFilter
+      );
+
+      questionsTableBody.innerHTML = '';
+
+      if(filtered.length === 0) {
+        questionsTableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:1rem;">No questions found for selected filters.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(q => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${q.id}</td>
+          <td>${q.class}</td>
+          <td>${q.subject}</td>
+          <td>${q.difficulty}</td>
+          <td title="${q.question}">${q.question.length > 50 ? q.question.slice(0, 50) + '...' : q.question}</td>
+          <td>
+            1) ${q.options[0]}<br>
+            2) ${q.options[1]}<br>
+            3) ${q.options[2]}<br>
+            4) ${q.options[3]}
+          </td>
+          <td>Option ${q.answer}</td>
+          <td>
+            <button onclick="editQuestion(${q.id})" aria-label="Edit question ${q.id}">Edit</button>
+            <button onclick="deleteQuestion(${q.id})" class="danger-btn" aria-label="Delete question ${q.id}">Delete</button>
+          </td>
+        `;
+        questionsTableBody.appendChild(tr);
+      });
+    }
+
+    filterForm.addEventListener('submit', e => {
+      e.preventDefault();
+      renderQuestions();
+    });
+
+    addQuestionBtn.addEventListener('click', () => {
+      editingQuestionId = null;
+      questionForm.reset();
+      questionModal.querySelector('h3').textContent = 'Add New Question';
+      questionModal.showModal();
+    });
+
+    cancelModalBtn.addEventListener('click', () => {
+      questionModal.close();
+    });
+
+    questionForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const newQuestion = {
+        id: editingQuestionId ?? (questionBank.length ? questionBank[questionBank.length - 1].id + 1 : 1),
+        class: questionForm.qClass.value,
+        subject: questionForm.qSubject.value,
+        difficulty: questionForm.qDifficulty.value,
+        question: questionForm.qText.value.trim(),
+        options: [
+          questionForm.opt1.value.trim(),
+          questionForm.opt2.value.trim(),
+          questionForm.opt3.value.trim(),
+          questionForm.opt4.value.trim(),
+        ],
+        answer: parseInt(questionForm.qAnswer.value)
+      };
+
+      if(editingQuestionId) {
+        const idx = questionBank.findIndex(q => q.id === editingQuestionId);
+        if(idx !== -1) {
+          questionBank[idx] = newQuestion;
         }
       } else {
-        if(confirm('Activate this student account?')) {
-          statusCell.textContent = 'Active';
-          btn.textContent = 'Suspend';
-          btn.style.background = '#e67e22';
-        }
+        questionBank.push(newQuestion);
       }
-    }
-  });
 
-  // CONTENT MANAGEMENT BUTTONS
-  document.getElementById('edit-homepage-btn').addEventListener('click', () => {
-    alert('Edit homepage content - UI only demo.');
-  });
-  document.getElementById('edit-faq-btn').addEventListener('click', () => {
-    alert('Edit FAQs & Rules - UI only demo.');
-  });
-  document.getElementById('edit-banners-btn').addEventListener('click', () => {
-    alert('Manage banners - UI only demo.');
-  });
+      questionModal.close();
+      renderQuestions();
+    });
 
-  // NOTIFICATIONS
-  document.getElementById('compose-notification-btn').addEventListener('click', () => {
-    alert('Compose and send notifications - UI only demo.');
-  });
+    window.editQuestion = function(id) {
+      const q = questionBank.find(q => q.id === id);
+      if(!q) return alert('Question not found');
 
-  // SECURITY & SETTINGS BUTTONS
-  document.getElementById('view-login-history-btn').addEventListener('click', () => {
-    alert('View login history - UI only demo.');
-  });
-  document.getElementById('set-password-policy-btn').addEventListener('click', () => {
-    alert('Set password policy - UI only demo.');
-  });
-  document.getElementById('site-settings-btn').addEventListener('click', () => {
-    alert('Site-wide settings - UI only demo.');
-  });
-  document.getElementById('backup-restore-btn').addEventListener('click', () => {
-    alert('Backup & restore - UI only demo.');
-  });
+      editingQuestionId = id;
+      questionForm.qClass.value = q.class;
+      questionForm.qSubject.value = q.subject;
+      questionForm.qDifficulty.value = q.difficulty;
+      questionForm.qText.value = q.question;
+      questionForm.opt1.value = q.options[0];
+      questionForm.opt2.value = q.options[1];
+      questionForm.opt3.value = q.options[2];
+      questionForm.opt4.value = q.options[3];
+      questionForm.qAnswer.value = q.answer;
 
-</script>
+      questionModal.querySelector('h3').textContent = 'Edit Question';
+      questionModal.showModal();
+    };
+
+    window.deleteQuestion = function(id) {
+      if(confirm('Are you sure you want to delete this question?')) {
+        questionBank = questionBank.filter(q => q.id !== id);
+        renderQuestions();
+      }
+    };
+
+    // Initial load
+    window.onload = () => {
+      renderUsers();
+      renderQuestions();
+    };
+  </script>
 
 </body>
 </html>
