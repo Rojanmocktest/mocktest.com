@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rojan Mocktest | Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4CAF50;
+      --bg: #f9f9f9;
+      --text: #333;
+      --light: #fff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background-color: var(--primary);
+      color: white;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 40px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      margin: 10px 0;
+      display: block;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: #3e8e41;
+      padding-left: 10px;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 26px;
+    }
+
+    .profile {
+      background-color: var(--light);
+      padding: 15px 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    .profile span {
+      font-weight: 600;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: var(--light);
+      border-left: 5px solid var(--primary);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    .card p {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+      }
+
+      .main {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Rojan Mocktest</h2>
+    <a href="#">🏠 Dashboard</a>
+    <a href="#">📝 Upcoming Tests</a>
+    <a href="#">📊 Results</a>
+    <a href="#">👤 Profile</a>
+    <a href="#">📢 Notifications</a>
+    <a href="#">❓ Help</a>
+    <a href="#">🚪 Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="header">
+      <h1>Welcome, Student</h1>
+      <div class="profile">Class: <span>10</span> | ID: <span>STD001</span></div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="cards">
+      <div class="card">
+        <h3>Upcoming Tests</h3>
+        <p>2 Tests scheduled this week</p>
+      </div>
+      <div class="card">
+        <h3>Average Score</h3>
+        <p>78.5%</p>
+      </div>
+      <div class="card">
+        <h3>Rank</h3>
+        <p>12th out of 60 students</p>
+      </div>
+    </div>
+
+    <!-- Test History Table -->
+    <h2>Previous Tests</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>Date</th>
+          <th>Score</th>
+          <th>Time Taken</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Math Mocktest 1</td>
+          <td>July 28, 2025</td>
+          <td>82%</td>
+          <td>28 mins</td>
+          <td>Completed</td>
+        </tr>
+        <tr>
+          <td>Science Mocktest 1</td>
+          <td>July 25, 2025</td>
+          <td>76%</td>
+          <td>30 mins</td>
+          <td>Completed</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
