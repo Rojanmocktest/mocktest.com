@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student - Results</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; margin:0; }
+.navbar { background:#1f3c88; color:#fff; }
+.navbar a { color:#fff; text-decoration:none; margin-right:15px; }
+.container { margin-top:30px; }
+.page-title { font-size:26px; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg p-3">
+  <a href="#" class="navbar-brand"><i class="fas fa-graduation-cap"></i> My Results</a>
+  <a href="student_dashboard.html">Dashboard</a>
+  <a href="student_mock_tests.html">Mock Tests</a>
+  <a href="#" onclick="logout()">Logout</a>
+</nav>
+
+<div class="container">
+  <div class="page-title"><i class="fas fa-chart-bar"></i> Published Test Results</div>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Test Name</th>
+        <th>Course</th>
+        <th>Score</th>
+        <th>Feedback</th>
+      </tr>
+    </thead>
+    <tbody id="resultsTableBody"></tbody>
+  </table>
+</div>
+
+<script>
+// Mock student login
+const currentStudentId = 1;
+
+// Load localStorage
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let courses = JSON.parse(localStorage.getItem('courses')) || [];
+let tests = JSON.parse(localStorage.getItem('tests')) || [];
+let results = JSON.parse(localStorage.getItem('results')) || [];
+
+// Render only published results
+function renderResults(){
+  const tbody = document.getElementById('resultsTableBody');
+  tbody.innerHTML = '';
+
+  // Filter results: student-specific & published
+  const studentResults = results.filter(r => r.studentId === currentStudentId && r.published);
+  if(studentResults.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" class="text-center">No published results yet.</td></tr>`;
+    return;
+  }
+
+  studentResults.forEach(r => {
+    const testName = tests.find(t => t.id == r.testId)?.name || '';
+    const courseName = courses.find(c => c.id == r.courseId)?.name || '';
+    const feedback = r.feedback || '-'; // optional feedback from admin
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${testName}</td>
+      <td>${courseName}</td>
+      <td>${r.score}</td>
+      <td>${feedback}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Logout
+function logout(){
+  alert('Logged out!');
+  window.location.href="student_login.html";
+}
+
+// Initial render
+renderResults();
+</script>
+</body>
+</html>

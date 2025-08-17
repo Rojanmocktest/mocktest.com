@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Profile - Rojan Mock Test</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin:0; }
+.sidebar { background: linear-gradient(180deg, #1f3c88, #3a5dbf); color:#fff; min-height:100vh; padding:30px 15px; border-radius:0 25px 25px 0; }
+.sidebar h2 { text-align:center; margin-bottom:40px; font-size:28px; font-weight:bold; }
+.sidebar a { display:flex; align-items:center; padding:12px 15px; margin:12px 0; color:#fff; font-weight:500; border-radius:12px; text-decoration:none; transition:all 0.3s ease; }
+.sidebar a i { background-color: rgba(255,255,255,0.2); width:36px; height:36px; line-height:36px; text-align:center; border-radius:50%; margin-right:12px; }
+.sidebar a:hover { background-color: rgba(255,255,255,0.2); padding-left:20px; }
+.content { padding:30px 25px; }
+.page-title { font-size:26px; font-weight:600; margin-bottom:25px; display:flex; align-items:center; gap:10px; }
+.form-control { max-width:400px; margin-bottom:15px; }
+</style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 sidebar">
+      <h2>Student Panel</h2>
+      <a href="student_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="my_courses.html"><i class="fas fa-book"></i> My Courses</a>
+      <a href="student_mock_tests.html"><i class="fas fa-pencil-alt"></i> Mock Tests</a>
+      <a href="student_results.html"><i class="fas fa-chart-line"></i> Results</a>
+      <a href="student_profile.html"><i class="fas fa-user"></i> Profile</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 content">
+      <div class="page-title"><i class="fas fa-user-circle"></i> My Profile</div>
+
+      <div id="suspendAlert" class="alert alert-danger" style="display:none;">
+        Your account is suspended. You cannot access tests or courses.
+      </div>
+
+      <form id="profileForm">
+        <label>Name</label>
+        <input type="text" id="name" class="form-control" required>
+
+        <label>Email</label>
+        <input type="email" id="email" class="form-control" required disabled>
+
+        <label>Password</label>
+        <input type="password" id="password" class="form-control" required>
+
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Get logged-in student email from sessionStorage (or a login system variable)
+let currentEmail = sessionStorage.getItem('currentStudentEmail'); 
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let student = students.find(s => s.email === currentEmail);
+
+if(!student){
+  alert('Student not found. Redirecting to login.');
+  window.location.href = "student_login.html";
+}
+
+// Show suspend alert if necessary
+if(student.status === 'Suspended'){
+  document.getElementById('suspendAlert').style.display = 'block';
+}
+
+// Populate form
+document.getElementById('name').value = student.name;
+document.getElementById('email').value = student.email;
+document.getElementById('password').value = student.password;
+
+// Update profile
+document.getElementById('profileForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  student.name = document.getElementById('name').value;
+  student.password = document.getElementById('password').value;
+  localStorage.setItem('students', JSON.stringify(students));
+  alert('Profile updated successfully!');
+});
+
+// Logout
+function logout(){
+  sessionStorage.removeItem('currentStudentEmail');
+  alert('Logged out!');
+  window.location.href = "student_login.html";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rojan MockTest - Student Login</title>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body, html { height:100%; background:#f9fafb; color:#333; }
+    a { text-decoration:none; color:inherit; }
+
+    header {
+      background:#2c3e50; color:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;
+      position:sticky; top:0; z-index:100; box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+    .logo img { height:50px; width:auto; border-radius:8px; cursor:pointer; transition:transform 0.3s ease; }
+    .logo img:hover { transform:scale(1.05); }
+    nav ul { list-style:none; display:flex; gap:2rem; }
+    nav ul li a { font-weight:600; color:#fff; transition:color 0.3s ease; }
+    nav ul li a:hover { color:#3498db; }
+
+    .login-container {
+      max-width:400px; margin:6rem auto; padding:2rem; background:#fff;
+      border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.1); text-align:center;
+    }
+    .login-container h2 { font-size:2rem; margin-bottom:1.5rem; color:#27ae60; }
+    .login-container form { display:flex; flex-direction:column; gap:1.2rem; }
+    input { padding:1rem; border-radius:8px; border:1px solid #ccc; font-size:1rem; }
+    input:focus { outline:none; border-color:#27ae60; box-shadow:0 0 5px rgba(39,174,96,0.5); }
+    button { padding:1rem; font-size:1.1rem; background:#27ae60; color:#fff; font-weight:700;
+      border:none; border-radius:50px; cursor:pointer; transition: background 0.3s ease, transform 0.3s ease; }
+    button:hover { background:#1e8449; transform:scale(1.05); }
+
+    .forgot { margin-top:0.5rem; font-size:0.9rem; color:#555; }
+    .forgot a { color:#27ae60; }
+    .forgot a:hover { text-decoration:underline; }
+
+    .register-btn {
+      display:inline-block; margin-top:1rem; background:#3498db; color:#fff; padding:0.8rem 2rem;
+      border-radius:50px; font-weight:700; transition: background 0.3s ease, transform 0.3s ease; cursor:pointer;
+    }
+    .register-btn:hover { background:#2980b9; transform:scale(1.05); }
+
+    footer { background:#2c3e50; color:#bbb; text-align:center; padding:1rem 2rem; font-size:0.9rem; margin-top:4rem; }
+
+    @media(max-width:480px){ .login-container{ margin:4rem 1rem; padding:1.5rem; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo"><img src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/527959586_783324677549682_8386284971334615592_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=DiVy0GvAlbkQ7kNvwHbB7th&_nc_oc=Adneq5hJ7tNKIP4pVwafExNGghTAQzmtH29rcjOithuW5kCXsp6fALiNaxx-t3gQYOoz6gPsUa446iFPHI5VGob2&_nc_zt=23&_nc_ht=scontent.fktm10-1.fna&_nc_gid=77-N5z_bTj50CSkiuhCgUg&oh=00_AfUD5o9AFDhAe59yeozKkYxxll48ycHzK8NYEgisv0YsdQ&oe=68A7DBBC" alt="Rojan Mocktest Logo"></a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="login-container">
+    <h2>Student Login</h2>
+    <form action="#" method="post">
+      <input type="text" name="username" placeholder="Username or Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div class="forgot">
+      <p>Forgot your password? <a href="#">Reset here</a></p>
+    </div>
+    <a href="student_register.html" class="register-btn">Register Account</a>
+  </div>
+
+  <footer>
+    &copy; 2025 Rojan MockTest. All rights reserved.
+  </footer>
+
+</body>
+</html>

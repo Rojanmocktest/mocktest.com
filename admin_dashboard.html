@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Rojan Mock Test</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; }
+.sidebar { background: linear-gradient(180deg, #1f3c88, #3a5dbf); color: #fff; min-height: 100vh; padding: 30px 15px; }
+.sidebar h2 { font-size: 28px; text-align: center; margin-bottom: 40px; font-weight: bold; }
+.sidebar a { display: flex; align-items: center; padding: 12px 15px; margin: 12px 0; color: #fff; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; text-decoration: none; }
+.sidebar a i { background-color: rgba(255,255,255,0.2); width: 36px; height: 36px; line-height: 36px; text-align: center; border-radius: 50%; margin-right: 12px; }
+.sidebar a:hover { background-color: rgba(255,255,255,0.2); padding-left: 20px; }
+.content { padding: 30px 25px; }
+.page-title { font-size: 26px; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+.card-section { background-color: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 25px; }
+.card-section h5 { font-weight: 600; margin-bottom: 15px; }
+.btn-action { margin-right: 10px; }
+table th, table td { vertical-align: middle; }
+.btn-clear { margin-bottom: 15px; }
+</style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 sidebar">
+      <h2>Admin Panel</h2>
+      <a href="admin_students.html"><i class="fas fa-user-check"></i> Students</a>
+      <a href="admin_courses.html"><i class="fas fa-book"></i> Courses</a>
+      <a href="admin_mock_tests.html"><i class="fas fa-pencil-alt"></i> Mock Tests</a>
+      <a href="admin_results.html"><i class="fas fa-chart-line"></i> Results</a>
+      <a href="admin_sample_data.html"><i class="fas fa-trash"></i> Sample Data</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 content">
+      <div class="page-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</div>
+
+      <!-- Dashboard Cards / Summary -->
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <div class="card card-section text-center">
+            <h5>Total Students</h5>
+            <h3 id="totalStudents">0</h3>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card card-section text-center">
+            <h5>Total Courses</h5>
+            <h3 id="totalCourses">0</h3>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card card-section text-center">
+            <h5>Total Tests</h5>
+            <h3 id="totalTests">0</h3>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card card-section text-center">
+            <h5>Total Results</h5>
+            <h3 id="totalResults">0</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <h5>Quick Links</h5>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="admin_students.html" class="btn btn-primary">Manage Students</a>
+          <a href="admin_courses.html" class="btn btn-success">Manage Courses</a>
+          <a href="admin_mock_tests.html" class="btn btn-warning">Manage Tests</a>
+          <a href="admin_results.html" class="btn btn-info">View Results</a>
+          <a href="admin_sample_data.html" class="btn btn-danger">Clear Sample Data</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Initialize data from localStorage
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let courses = JSON.parse(localStorage.getItem('courses')) || [];
+let tests = JSON.parse(localStorage.getItem('tests')) || [];
+let results = JSON.parse(localStorage.getItem('results')) || [];
+
+// Function to update dashboard counts
+function updateDashboardCounts() {
+    document.getElementById('totalStudents').innerText = students.length;
+    document.getElementById('totalCourses').innerText = courses.length;
+    document.getElementById('totalTests').innerText = tests.length;
+    document.getElementById('totalResults').innerText = results.length;
+}
+
+// Initial load
+updateDashboardCounts();
+
+// Listen for changes in localStorage (cross-tab updates)
+window.addEventListener('storage', function(event) {
+    if (event.key === 'students') students = JSON.parse(event.newValue) || [];
+    if (event.key === 'courses') courses = JSON.parse(event.newValue) || [];
+    if (event.key === 'tests') tests = JSON.parse(event.newValue) || [];
+    if (event.key === 'results') results = JSON.parse(event.newValue) || [];
+    updateDashboardCounts();
+});
+
+// Optional: auto-refresh counts every 2 seconds
+setInterval(() => {
+    students = JSON.parse(localStorage.getItem('students')) || [];
+    courses = JSON.parse(localStorage.getItem('courses')) || [];
+    tests = JSON.parse(localStorage.getItem('tests')) || [];
+    results = JSON.parse(localStorage.getItem('results')) || [];
+    updateDashboardCounts();
+}, 2000);
+
+// Logout function
+function logout(){
+    alert('Admin logged out!');
+    window.location.href = "admin_login.html";
+}
+</script>
+</body>
+</html>

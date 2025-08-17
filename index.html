@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rojan Mocktest - Professional Mock Test Platform</title>
+  <style>
+    /* Reset */
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body, html { height:100%; background:#f9fafb; color:#333; overflow-x:hidden; }
+    a { text-decoration:none; color:inherit; }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed; inset:0; background:#2c3e50; color:#fff;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      z-index:9999; animation:fadeOut 1s ease forwards; animation-delay:4.5s;
+      user-select:none; padding:0 1rem; text-align:center;
+    }
+    #splash img { height:100px; margin-bottom:1rem; border-radius:8px; object-fit:contain; cursor:default; }
+    .text-container { text-align:center; max-width:100%; }
+    .typing { overflow:hidden; border-right:.15em solid #27ae60; white-space:nowrap; letter-spacing:.15em;
+      animation: typing 4.5s steps(40,end), blink-caret 0.75s step-end infinite;
+      font-size:1.5rem; font-weight:700; max-width:40ch; margin:0 auto; }
+    .subtitle { opacity:0; animation:fadeIn 1.5s ease forwards; animation-delay:4.5s; font-size:1.2rem; margin-top:0.5rem; color:#a5d6a7; }
+
+    @keyframes typing { from{width:0} to{width:40ch} }
+    @keyframes blink-caret { 50%{border-color:transparent} }
+    @keyframes fadeIn { to{opacity:1} }
+    @keyframes fadeOut { to{opacity:0; visibility:hidden; pointer-events:none} }
+
+    /* Main Content */
+    #main-content { opacity:0; animation:showContent 1s forwards; animation-delay:5.5s; min-height:100vh; display:flex; flex-direction:column; }
+    @keyframes showContent { to{opacity:1} }
+
+    /* Header */
+    header { background:#2c3e50; color:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    .logo img { height:50px; width:auto; border-radius:8px; object-fit:contain; cursor:pointer; transition:transform 0.3s ease; }
+    .logo img:hover { transform:scale(1.05); }
+    nav ul { list-style:none; display:flex; gap:2rem; }
+    nav ul li a { font-weight:600; color:#fff; transition:color 0.3s ease; }
+    nav ul li a:hover { color:#3498db; }
+
+    /* Hero Section */
+    .hero { flex:1; background:url('https://img.freepik.com/premium-vector/illustration-man-taking-online-college-exam-home-vector_218660-821.jpg') no-repeat center/cover;
+      color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8rem 1rem 6rem; clip-path: polygon(0 0,100% 0,100% 85%,0 100%); position:relative; }
+    .hero::before { content:""; position:absolute; inset:0; background: rgba(39,174,96,0.75); z-index:0; border-radius:0 0 100px 100px; }
+    .hero h1, .hero p, .hero .btn-group { position:relative; z-index:1; }
+    .hero h1 { font-size:3.5rem; margin-bottom:1rem; letter-spacing:3px; }
+    .hero p { font-size:1.3rem; max-width:600px; margin-bottom:3rem; font-weight:500; text-shadow:0 2px 6px rgba(0,0,0,0.3); }
+    .btn-group { display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; }
+    .btn { background:#fff; color:#27ae60; font-weight:700; padding:1rem 3rem; border-radius:50px; font-size:1.2rem; box-shadow:0 6px 20px rgba(255,255,255,0.7); transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease; cursor:pointer; }
+    .btn:hover { background:#1e8449; color:#fff; box-shadow:0 8px 25px rgba(30,132,73,0.8); transform:scale(1.05); }
+
+    /* Features */
+    .features { background:#fff; padding:4rem 2rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2.5rem; max-width:1100px; margin:-8rem auto 4rem; box-shadow:0 8px 25px rgba(0,0,0,0.05); border-radius:12px; }
+    .feature-card { background:#f0f4f8; padding:2rem; border-radius:10px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.05); transition:transform 0.3s ease; cursor:default; }
+    .feature-card:hover { transform:translateY(-8px); box-shadow:0 10px 25px rgba(0,0,0,0.1); }
+    .feature-icon { font-size:3rem; color:#27ae60; margin-bottom:1rem; }
+    .feature-title { font-weight:700; margin-bottom:0.75rem; font-size:1.25rem; }
+    .feature-desc { font-size:1rem; color:#555; line-height:1.4; }
+
+    /* About */
+    .about { max-width:900px; margin:0 auto 6rem; padding:0 2rem; text-align:center; color:#444; }
+    .about h2 { font-size:2.5rem; margin-bottom:1rem; color:#27ae60; }
+    .about p { font-size:1.1rem; line-height:1.6; }
+
+    /* Contact */
+    .contact { text-align:center; padding-bottom:4rem; }
+    .contact h2 { font-size:2rem; margin-bottom:1rem; color:#27ae60; }
+    .contact p a { color:#27ae60; font-weight:600; }
+    .contact p a:hover { text-decoration:underline; }
+
+    /* Footer */
+    footer { background:#2c3e50; color:#bbb; text-align:center; padding:1rem 2rem; font-size:0.9rem; }
+
+    @media(max-width:768px){ .hero h1{ font-size:2.5rem; } .hero p{ font-size:1.1rem; max-width:90%; } nav ul{ gap:1rem; } }
+    @media(max-width:480px){ .btn{ padding:0.9rem 2rem; font-size:1rem; } .features{ margin:-5rem 1rem 3rem; grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div id="splash">
+    <img src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/527959586_783324677549682_8386284971334615592_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=DiVy0GvAlbkQ7kNvwHbB7th&_nc_oc=Adneq5hJ7tNKIP4pVwafExNGghTAQzmtH29rcjOithuW5kCXsp6fALiNaxx-t3gQYOoz6gPsUa446iFPHI5VGob2&_nc_zt=23&_nc_ht=scontent.fktm10-1.fna&_nc_gid=77-N5z_bTj50CSkiuhCgUg&oh=00_AfUD5o9AFDhAe59yeozKkYxxll48ycHzK8NYEgisv0YsdQ&oe=68A7DBBC" alt="Rojan Mocktest Logo" />
+    <div class="text-container">
+      <div class="typing">Welcome to RojanMockTest website</div>
+      <div class="subtitle">Embark your learning</div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content">
+
+    <header>
+      <a href="#home" class="logo"><img src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/527959586_783324677549682_8386284971334615592_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=DiVy0GvAlbkQ7kNvwHbB7th&_nc_oc=Adneq5hJ7tNKIP4pVwafExNGghTAQzmtH29rcjOithuW5kCXsp6fALiNaxx-t3gQYOoz6gPsUa446iFPHI5VGob2&_nc_zt=23&_nc_ht=scontent.fktm10-1.fna&_nc_gid=77-N5z_bTj50CSkiuhCgUg&oh=00_AfUD5o9AFDhAe59yeozKkYxxll48ycHzK8NYEgisv0YsdQ&oe=68A7DBBC" alt="Rojan Mocktest Logo"></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+
+      <section class="hero" id="home">
+        <h1>Professional Online Mock Test Platform</h1>
+        <p>Prepare confidently with Rojan Mocktest — Mock tests tailored to your class and schedule.</p>
+        <div class="btn-group">
+          <a href="student_login.html" class="btn">Student Portal</a>
+          <a href="admin_login.html" class="btn">Admin Portal</a>
+        </div>
+      </section>
+
+      <section class="features" id="features">
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3 class="feature-title">Extensive Question Bank</h3>
+          <p class="feature-desc">Thousands of carefully crafted MCQs organized by subject and class level.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3 class="feature-title">Scheduled Tests</h3>
+          <p class="feature-desc">Take mock tests as per your academic calendar with automated reminders.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Detailed Results & Reports</h3>
+          <p class="feature-desc">Track your progress with performance summaries and downloadable reports.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">Secure & Reliable</h3>
+          <p class="feature-desc">User accounts and data are managed securely by our professional admin team.</p>
+        </div>
+      </section>
+
+      <section class="about" id="about">
+        <h2>About Rojan Mocktest</h2>
+        <p>
+          Rojan Mocktest is designed to help students prepare effectively with tailored mock exams 
+          aligned to their curriculum and class. Our platform offers a clean, user-friendly interface 
+          and comprehensive management for both students and administrators.
+        </p>
+      </section>
+
+      <section class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <p>Email: <a href="mailto:rojangiree@gmail.com">rojangiree@gmail.com</a></p>
+        <p>Phone: +977 9868156268</p>
+      </section>
+
+    </main>
+
+    <footer>
+      &copy; 2025 Rojan Mocktest. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

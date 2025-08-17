@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Courses</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; margin:0; }
+.sidebar { background:linear-gradient(180deg,#1f3c88,#3a5dbf); color:#fff; min-height:100vh; padding:30px 15px; }
+.sidebar h2 { text-align:center; margin-bottom:40px; font-weight:bold; }
+.sidebar a { display:flex; align-items:center; padding:12px 15px; margin:12px 0; color:#fff; text-decoration:none; border-radius:12px; transition:0.3s; }
+.sidebar a i { background:rgba(255,255,255,0.2); width:36px; height:36px; line-height:36px; text-align:center; border-radius:50%; margin-right:12px; }
+.sidebar a:hover { background:rgba(255,255,255,0.2); padding-left:20px; }
+.content { padding:30px; }
+.page-title { font-size:26px; font-weight:600; margin-bottom:25px; display:flex; align-items:center; gap:10px; }
+</style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 sidebar">
+      <h2>Admin Panel</h2>
+      <a href="admin_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="admin_students.html"><i class="fas fa-user-check"></i> Students</a>
+      <a href="admin_courses.html"><i class="fas fa-book"></i> Courses</a>
+      <a href="admin_mock_tests.html"><i class="fas fa-pencil-alt"></i> Mock Tests</a>
+      <a href="admin_results.html"><i class="fas fa-chart-line"></i> Results</a>
+      <a href="admin_sample_data.html"><i class="fas fa-trash"></i> Sample Data</a>
+      <a href="admin_profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 content">
+      <div class="page-title"><i class="fas fa-book"></i> Courses</div>
+
+      <form id="addCourseForm" class="mb-4">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="courseName" placeholder="Course Name" required>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="courseDesc" placeholder="Course Description" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Add Course</button>
+      </form>
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Description</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="coursesTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// Initialize courses array from localStorage
+let courses = JSON.parse(localStorage.getItem('courses')) || [];
+
+// Render courses table
+function renderCourses(){
+  const tbody = document.getElementById('coursesTableBody');
+  tbody.innerHTML = '';
+  courses.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${c.id}</td>
+      <td>${c.name}</td>
+      <td>${c.description}</td>
+      <td>
+        <button class="btn btn-warning btn-sm" onclick="editCourse(${c.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})">Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Add new course
+document.getElementById('addCourseForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('courseName').value;
+  const desc = document.getElementById('courseDesc').value;
+  const newCourse = {id:Date.now(), name, description:desc};
+  courses.push(newCourse);
+  localStorage.setItem('courses', JSON.stringify(courses));
+  this.reset();
+  renderCourses();
+});
+
+// Edit course
+function editCourse(id){
+  const course = courses.find(c => c.id === id);
+  if(course){
+    const newName = prompt("Enter new course name:", course.name);
+    const newDesc = prompt("Enter new description:", course.description);
+    if(newName && newDesc){
+      course.name = newName;
+      course.description = newDesc;
+      localStorage.setItem('courses', JSON.stringify(courses));
+      renderCourses();
+    }
+  }
+}
+
+// Delete course
+function deleteCourse(id){
+  courses = courses.filter(c => c.id !== id);
+  localStorage.setItem('courses', JSON.stringify(courses));
+  renderCourses();
+}
+
+// Logout
+function logout(){
+  alert('Admin logged out!');
+  window.location.href="admin_login.html";
+}
+
+// Initial render
+renderCourses();
+</script>
+</body>
+</html>

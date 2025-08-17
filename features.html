@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rojan MockTest - Features</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body, html { height:100%; background:#f9fafb; color:#333; overflow-x:hidden; }
+    a { text-decoration:none; color:inherit; }
+    
+    header {
+      background:#2c3e50; color:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;
+      position:sticky; top:0; z-index:100; box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    }
+    .logo img { height:50px; width:auto; border-radius:8px; cursor:pointer; transition:transform 0.3s ease; }
+    .logo img:hover { transform:scale(1.05); }
+    nav ul { list-style:none; display:flex; gap:2rem; }
+    nav ul li a { font-weight:600; color:#fff; transition:color 0.3s ease; }
+    nav ul li a:hover { color:#3498db; }
+
+    .hero {
+      flex:1; background:url('https://cdn.elearningindustry.com/wp-content/uploads/2018/05/models-of-online-assessment-part-1-computer-adaptive-testing-1024x574.jpg') no-repeat center/cover;
+      color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+      padding:6rem 1rem; position:relative;
+    }
+    .hero::before {
+      content:""; position:absolute; inset:0; background:rgba(39,174,96,0.75); z-index:0;
+    }
+    .hero h1, .hero p { position:relative; z-index:1; }
+    .hero h1 { font-size:3rem; margin-bottom:1rem; letter-spacing:2px; }
+    .hero p { font-size:1.2rem; max-width:700px; text-shadow:0 2px 6px rgba(0,0,0,0.3); }
+
+    .features-container {
+      max-width:1100px; margin:4rem auto; padding:0 2rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2.5rem;
+    }
+    .feature-card {
+      background:#f0f4f8; padding:2rem; border-radius:10px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.05); transition:transform 0.3s ease; cursor:default;
+    }
+    .feature-card:hover { transform:translateY(-8px); box-shadow:0 10px 25px rgba(0,0,0,0.1); }
+    .feature-icon { font-size:3rem; color:#27ae60; margin-bottom:1rem; }
+    .feature-title { font-weight:700; margin-bottom:0.75rem; font-size:1.3rem; }
+    .feature-desc { font-size:1rem; color:#555; line-height:1.5; }
+
+    footer { background:#2c3e50; color:#bbb; text-align:center; padding:1rem 2rem; font-size:0.9rem; margin-top:4rem; }
+    
+    @media(max-width:768px){ .hero h1{ font-size:2.2rem; } .hero p{ font-size:1rem; } nav ul{ gap:1rem; } }
+    @media(max-width:480px){ .features-container{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo"><img src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/527959586_783324677549682_8386284971334615592_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=DiVy0GvAlbkQ7kNvwHbB7th&_nc_oc=Adneq5hJ7tNKIP4pVwafExNGghTAQzmtH29rcjOithuW5kCXsp6fALiNaxx-t3gQYOoz6gPsUa446iFPHI5VGob2&_nc_zt=23&_nc_ht=scontent.fktm10-1.fna&_nc_gid=77-N5z_bTj50CSkiuhCgUg&oh=00_AfUD5o9AFDhAe59yeozKkYxxll48ycHzK8NYEgisv0YsdQ&oe=68A7DBBC" alt="Rojan Mocktest Logo"></a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Explore Rojan MockTest Features</h1>
+    <p>All tools and features designed to help you prepare better, track progress, and succeed in your exams.</p>
+  </section>
+
+  <section class="features-container">
+
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <h3 class="feature-title">Extensive Question Bank</h3>
+      <p>Thousands of MCQs and practice questions organized by class and subject for comprehensive preparation.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3 class="feature-title">Scheduled Tests</h3>
+      <p>Set your own schedule or follow our automated calendar to stay consistent and disciplined.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3 class="feature-title">Detailed Performance Reports</h3>
+      <p>Analyze your strengths and weaknesses with easy-to-read charts and downloadable reports.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3 class="feature-title">Secure & Reliable</h3>
+      <p>All student data, tests, and results are securely managed with professional admin control.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">💡</div>
+      <h3 class="feature-title">Hints & Explanations</h3>
+      <p>Get instant explanations for questions to learn faster and understand concepts thoroughly.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <h3 class="feature-title">Accessible Anywhere</h3>
+      <p>Study from home or on the go. Fully responsive for PC, tablet, and mobile devices.</p>
+    </div>
+
+  </section>
+
+  <footer>
+    &copy; 2025 Rojan MockTest. All rights reserved.
+  </footer>
+
+</body>
+</html>

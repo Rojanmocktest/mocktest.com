@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Results Management</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; margin:0; }
+.navbar { background:#1f3c88; color:#fff; }
+.navbar a { color:#fff; text-decoration:none; margin-right:15px; }
+.container { margin-top:30px; }
+.page-title { font-size:26px; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg p-3">
+  <a href="#" class="navbar-brand"><i class="fas fa-tachometer-alt"></i> Admin Panel</a>
+  <a href="admin_dashboard.html">Dashboard</a>
+  <a href="#" onclick="logout()">Logout</a>
+</nav>
+
+<div class="container">
+  <div class="page-title"><i class="fas fa-chart-bar"></i> Manage Student Results</div>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Student Name</th>
+        <th>Test Name</th>
+        <th>Course</th>
+        <th>Score</th>
+        <th>Feedback</th>
+        <th>Published</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="resultsTableBody"></tbody>
+  </table>
+</div>
+
+<script>
+// Load localStorage
+let students = JSON.parse(localStorage.getItem('students')) || [];
+let courses = JSON.parse(localStorage.getItem('courses')) || [];
+let tests = JSON.parse(localStorage.getItem('tests')) || [];
+let results = JSON.parse(localStorage.getItem('results')) || [];
+
+// Render all results
+function renderResults() {
+  const tbody = document.getElementById('resultsTableBody');
+  tbody.innerHTML = '';
+
+  if(results.length === 0){
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center">No results available.</td></tr>`;
+    return;
+  }
+
+  results.forEach(r => {
+    const studentName = students.find(s => s.id == r.studentId)?.name || '';
+    const testName = tests.find(t => t.id == r.testId)?.name || '';
+    const courseName = courses.find(c => c.id == r.courseId)?.name || '';
+    const feedback = r.feedback || '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${studentName}</td>
+      <td>${testName}</td>
+      <td>${courseName}</td>
+      <td>${r.score}</td>
+      <td><input type="text" value="${feedback}" onchange="updateFeedback(${r.id}, this.value)" class="form-control"></td>
+      <td><input type="checkbox" ${r.published ? "checked" : ""} onchange="togglePublish(${r.id}, this.checked)"></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteResult(${r.id})">Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Update feedback
+function updateFeedback(resultId, value){
+  const result = results.find(r => r.id === resultId);
+  if(result){
+    result.feedback = value;
+    localStorage.setItem('results', JSON.stringify(results));
+  }
+}
+
+// Toggle publish/unpublish
+function togglePublish(resultId, isPublished){
+  const result = results.find(r => r.id === resultId);
+  if(result){
+    result.published = isPublished;
+    localStorage.setItem('results', JSON.stringify(results));
+    alert(`Result has been ${isPublished ? "published" : "unpublished"}.`);
+  }
+}
+
+// Delete result
+function deleteResult(resultId){
+  if(confirm("Are you sure you want to delete this result?")){
+    results = results.filter(r => r.id !== resultId);
+    localStorage.setItem('results', JSON.stringify(results));
+    renderResults();
+  }
+}
+
+// Logout
+function logout(){
+  alert('Logged out!');
+  window.location.href="admin_login.html";
+}
+
+// Initial render
+renderResults();
+</script>
+</body>
+</html>

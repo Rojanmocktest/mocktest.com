@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Notifications - Rojan Mock Test</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; }
+.sidebar { background: linear-gradient(180deg, #1f3c88, #3a5dbf); color: #fff; min-height: 100vh; padding: 30px 15px; }
+.sidebar h2 { font-size: 28px; text-align: center; margin-bottom: 40px; font-weight: bold; }
+.sidebar a { display: flex; align-items: center; padding: 12px 15px; margin: 12px 0; color: #fff; font-weight: 500; border-radius: 12px; transition: all 0.3s ease; text-decoration: none; }
+.sidebar a i { background-color: rgba(255,255,255,0.2); width: 36px; height: 36px; line-height: 36px; text-align: center; border-radius: 50%; margin-right: 12px; }
+.sidebar a:hover { background-color: rgba(255,255,255,0.2); padding-left: 20px; }
+.content { padding: 30px 25px; }
+.page-title { font-size: 26px; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+.card-section { background-color: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 25px; }
+table th, table td { vertical-align: middle; }
+.btn-action { margin-right: 10px; }
+</style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 sidebar">
+      <h2>Admin Panel</h2>
+      <a href="admin_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="admin_students.html"><i class="fas fa-user-check"></i> Students</a>
+      <a href="admin_courses.html"><i class="fas fa-book"></i> Courses</a>
+      <a href="admin_mock_tests.html"><i class="fas fa-pencil-alt"></i> Mock Tests</a>
+      <a href="admin_results.html"><i class="fas fa-chart-line"></i> Results</a>
+      <a href="admin_notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 content">
+      <div class="page-title"><i class="fas fa-bell"></i> Notifications</div>
+
+      <!-- Pending Student Approvals -->
+      <div class="card-section">
+        <h5>Pending Student Approvals</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="pendingStudentsTable">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- New / Unpublished Test Results -->
+      <div class="card-section">
+        <h5>New Test Submissions (Unpublished Results)</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Course</th>
+              <th>Test</th>
+              <th>Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="newResultsTable">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Logout
+function logout(){
+    alert('Admin logged out!');
+    window.location.href = "admin_login.html";
+}
+
+// Load pending students and unpublished results
+function loadNotifications(){
+    let students = JSON.parse(localStorage.getItem('students')) || [];
+    let results = JSON.parse(localStorage.getItem('results')) || [];
+
+    // Pending students
+    let pendingStudents = students.filter(s => !s.approved);
+    let pendingTable = document.getElementById('pendingStudentsTable');
+    pendingTable.innerHTML = '';
+    pendingStudents.forEach((s, i) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${i+1}</td>
+            <td>${s.name}</td>
+            <td>${s.email}</td>
+            <td>
+                <button class="btn btn-success btn-sm" onclick="approveStudent(${s.id})">Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="rejectStudent(${s.id})">Reject</button>
+            </td>
+        `;
+        pendingTable.appendChild(tr);
+    });
+
+    // Unpublished results
+    let unpublishedResults = results.filter(r => !r.published);
+    let resultsTable = document.getElementById('newResultsTable');
+    resultsTable.innerHTML = '';
+    unpublishedResults.forEach((r, i) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${i+1}</td>
+            <td>${r.studentName}</td>
+            <td>${r.course}</td>
+            <td>${r.testName}</td>
+            <td>${r.score}</td>
+            <td>
+                <button class="btn btn-info btn-sm" onclick="publishResult(${r.id})">Publish</button>
+            </td>
+        `;
+        resultsTable.appendChild(tr);
+    });
+}
+
+// Approve student
+function approveStudent(id){
+    let students = JSON.parse(localStorage.getItem('students')) || [];
+    let student = students.find(s => s.id === id);
+    if(student){
+        student.approved = true;
+        localStorage.setItem('students', JSON.stringify(students));
+        loadNotifications();
+    }
+}
+
+// Reject student (delete)
+function rejectStudent(id){
+    let students = JSON.parse(localStorage.getItem('students')) || [];
+    students = students.filter(s => s.id !== id);
+    localStorage.setItem('students', JSON.stringify(students));
+    loadNotifications();
+}
+
+// Publish result
+function publishResult(id){
+    let results = JSON.parse(localStorage.getItem('results')) || [];
+    let result = results.find(r => r.id === id);
+    if(result){
+        result.published = true;
+        localStorage.setItem('results', JSON.stringify(results));
+        loadNotifications();
+    }
+}
+
+// Initial load
+loadNotifications();
+
+// Auto-refresh every 2 seconds
+setInterval(loadNotifications, 2000);
+</script>
+</body>
+</html>
