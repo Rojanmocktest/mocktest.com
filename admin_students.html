@@ -12,6 +12,7 @@ body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; margin:0; }
 .navbar a { color:#fff; text-decoration:none; margin-right:15px; }
 .container { margin-top:30px; }
 .page-title { font-size:26px; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+.table input { width:100%; }
 </style>
 </head>
 <body>
@@ -25,20 +26,18 @@ body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; margin:0; }
   <div class="page-title"><i class="fas fa-users"></i> Manage Students</div>
 
   <div class="mb-3">
-    <input type="text" id="searchInput" class="form-control" placeholder="Search students by name or email">
-    <label><input type="checkbox" id="selectAll"> Select All</label>
-    <button class="btn btn-success btn-sm" onclick="bulkApprove()">Approve Selected</button>
-    <button class="btn btn-warning btn-sm" onclick="bulkSuspend()">Suspend Selected</button>
-    <button class="btn btn-secondary btn-sm" onclick="bulkUnsuspend()">Unsuspend Selected</button>
-    <button class="btn btn-danger btn-sm" onclick="bulkDelete()">Delete Selected</button>
+    <button class="btn btn-primary btn-sm" onclick="addStudent()">Add New Student</button>
+    <input type="text" id="searchInput" class="form-control mt-2" placeholder="Search by name or email">
   </div>
 
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th>Select</th>
-        <th>Student Name</th>
+        <th>ID</th>
+        <th>Name</th>
         <th>Email</th>
+        <th>Password</th>
+        <th>Courses</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -48,36 +47,38 @@ body { font-family:'Segoe UI',sans-serif; background:#f0f2f5; margin:0; }
 </div>
 
 <script>
-// Load students from localStorage
+// Load students
 let students = JSON.parse(localStorage.getItem('students')) || [];
 
 // Render students
 function renderStudents(filter=''){
   const tbody = document.getElementById('studentsTableBody');
   tbody.innerHTML = '';
-
   let filtered = students;
   if(filter){
     const f = filter.toLowerCase();
     filtered = students.filter(s => s.name.toLowerCase().includes(f) || s.email.toLowerCase().includes(f));
   }
-
-  if(filtered.length === 0){
-    tbody.innerHTML = `<tr><td colspan="5" class="text-center">No students found.</td></tr>`;
+  if(filtered.length===0){
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center">No students found.</td></tr>`;
     return;
   }
-
   filtered.forEach(s=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input type="checkbox" class="studentCheckbox" data-id="${s.id}"></td>
-      <td><input type="text" class="form-control" value="${s.name}" onchange="updateStudent(${s.id}, 'name', this.value)"></td>
-      <td><input type="email" class="form-control" value="${s.email}" onchange="updateStudent(${s.id}, 'email', this.value)"></td>
-      <td>${s.status || 'Pending'}</td>
+      <td><input type="text" value="${s.id}" onchange="updateStudent(${s.id}, 'id', this.value)"></td>
+      <td><input type="text" value="${s.name}" onchange="updateStudent(${s.id}, 'name', this.value)"></td>
+      <td><input type="email" value="${s.email}" onchange="updateStudent(${s.id}, 'email', this.value)"></td>
+      <td><input type="text" value="${s.password}" onchange="updateStudent(${s.id}, 'password', this.value)"></td>
+      <td><input type="text" value="${s.courses ? s.courses.join(',') : ''}" onchange="updateStudent(${s.id}, 'courses', this.value.split(','))"></td>
       <td>
-        <button class="btn btn-success btn-sm" onclick="approveStudent(${s.id})">Approve</button>
-        <button class="btn btn-warning btn-sm" onclick="suspendStudent(${s.id})">Suspend</button>
-        <button class="btn btn-secondary btn-sm" onclick="unsuspendStudent(${s.id})">Unsuspend</button>
+        <select onchange="updateStudent(${s.id}, 'status', this.value)">
+          <option value="Pending" ${s.status==='Pending'?'selected':''}>Pending</option>
+          <option value="Approved" ${s.status==='Approved'?'selected':''}>Approved</option>
+          <option value="Suspended" ${s.status==='Suspended'?'selected':''}>Suspended</option>
+        </select>
+      </td>
+      <td>
         <button class="btn btn-danger btn-sm" onclick="deleteStudent(${s.id})">Delete</button>
       </td>
     `;
@@ -85,15 +86,16 @@ function renderStudents(filter=''){
   });
 }
 
-// Search filter
-document.getElementById('searchInput').addEventListener('input', e => renderStudents(e.target.value));
+// Add new student
+function addStudent(){
+  const newId = Date.now(); // unique ID
+  const newStudent = {id:newId, name:'New Student', email:'', password:'', courses:[], status:'Pending', testsTaken:[], averageScore:0};
+  students.push(newStudent);
+  localStorage.setItem('students', JSON.stringify(students));
+  renderStudents();
+}
 
-// Select All checkbox
-document.getElementById('selectAll').addEventListener('change', function(){
-  document.querySelectorAll('.studentCheckbox').forEach(cb => cb.checked = this.checked);
-});
-
-// Update student detail
+// Update student
 function updateStudent(id, field, value){
   const student = students.find(s=>s.id===id);
   if(student){
@@ -102,21 +104,7 @@ function updateStudent(id, field, value){
   }
 }
 
-// Approve / Suspend / Unsuspend single student
-function approveStudent(id){ updateStatus(id,'Approved'); }
-function suspendStudent(id){ updateStatus(id,'Suspended'); }
-function unsuspendStudent(id){ updateStatus(id,'Approved'); }
-
-function updateStatus(id,status){
-  const student = students.find(s=>s.id===id);
-  if(student){
-    student.status = status;
-    localStorage.setItem('students', JSON.stringify(students));
-    renderStudents();
-  }
-}
-
-// Delete single student
+// Delete student
 function deleteStudent(id){
   if(confirm("Delete this student?")){
     students = students.filter(s=>s.id!==id);
@@ -125,25 +113,14 @@ function deleteStudent(id){
   }
 }
 
-// Bulk actions
-function getSelectedStudents(){
-  return Array.from(document.querySelectorAll('.studentCheckbox:checked')).map(cb=>parseInt(cb.dataset.id));
-}
-
-function bulkApprove(){ getSelectedStudents().forEach(id=>approveStudent(id)); }
-function bulkSuspend(){ getSelectedStudents().forEach(id=>suspendStudent(id)); }
-function bulkUnsuspend(){ getSelectedStudents().forEach(id=>unsuspendStudent(id)); }
-function bulkDelete(){
-  if(confirm("Delete selected students?")){
-    const selected = getSelectedStudents();
-    students = students.filter(s=>!selected.includes(s.id));
-    localStorage.setItem('students', JSON.stringify(students));
-    renderStudents();
-  }
-}
+// Search filter
+document.getElementById('searchInput').addEventListener('input', e => renderStudents(e.target.value));
 
 // Logout
-function logout(){ alert('Logged out!'); window.location.href="admin_login.html"; }
+function logout(){
+  alert('Logged out!');
+  window.location.href='admin_login.html';
+}
 
 // Initial render
 renderStudents();
